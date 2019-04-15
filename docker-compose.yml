@@ -1,0 +1,26 @@
+version: '2.3'
+
+services:
+  mplabx:
+    build:
+     context: .
+     dockerfile: Dockerfile
+    environment:
+     - DISPLAY
+     - TZ=Europe/Oslo
+    volumes:
+     - /tmp/.X11-unix:/tmp/.X11-unix:ro
+     - /dev/bus/usb:/dev/bus/usb
+     - ./MPLABX_Folders/MPLABXProjects:/mplabx/MPLABXProjects
+     - ./MPLABX_Folders/cache:/mplabx/.cache
+     - ./MPLABX_Folders/java:/mplabx/.java
+     - ./MPLABX_Folders/mchp_packs:/mplabx/.mchp_packs
+     - ./MPLABX_Folders/mplab_ide:/mplabx/.mplab_ide
+     - ./MPLABX_Folders/mplabcomm:/mplabx/.mplabcomm
+     - ./MPLABX_Folders/oracle_jre_usage:/mplabx/.oracle_jre_usage
+    device_cgroup_rules:
+     - 'c 189:* rmw'
+    cap_drop:
+     - ALL
+    cap_add:
+     - MKNOD

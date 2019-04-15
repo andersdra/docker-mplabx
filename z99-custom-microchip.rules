@@ -1,0 +1,14 @@
+# PICKIT4
+ACTION=="add", SUBSYSTEM=="tty", ATTRS{idVendor}=="03eb", ATTRS{idProduct}=="2177", MODE:="0666", SYMLINK+="/dev/bus/usb/pickit/tty"
+ACTION=="add", SUBSYSTEM=="hidraw", ATTRS{idVendor}=="03eb", ATTRS{idProduct}=="2177", MODE:="0666", SYMLINK+="/dev/bus/usb/pickit/hidraw"
+ACTION=="add", SUBSYSTEM=="usbmisc", ATTRS{idVendor}=="03eb", ATTRS{idProduct}=="2177", MODE:="0666", SYMLINK+="/dev/bus/usb/pickit/usbmisc"
+ACTION=="bind", SUBSYSTEM=="usb", ATTRS{idVendor}=="03eb", ATTRS{idProduct}=="2177", MODE:="0666", SYMLINK+="/dev/bus/usb/pickit/usb"
+# ATMEL-ICE
+ACTION=="add", SUBSYSTEM=="usb", ATTRS{idVendor}=="03eb", ATTRS{idProduct}=="2141", MODE:="0666", SYMLINK+="/dev/bus/usb/atmelice/usb0"
+ACTION=="add", SUBSYSTEM=="usb", ATTRS{idVendor}=="03eb", ATTRS{idProduct}=="2141", MODE:="0666", SYMLINK+="/dev/bus/usb/atmelice/usb1"
+ACTION=="add", SUBSYSTEM=="hidraw", ATTRS{idVendor}=="03eb", ATTRS{idProduct}=="2141", MODE:="0666", SYMLINK+="/dev/bus/usb/atmelice/hidraw"
+ACTION=="add", SUBSYSTEM=="usbmisc", ATTRS{idVendor}=="03eb", ATTRS{idProduct}=="2141", MODE:="0666", SYMLINK+="/dev/bus/usb/atmelice/usbmisc"
+# mEDBG
+ACTION=="add", SUBSYSTEM=="tty", ATTRS{idVendor}=="03eb", ATTRS{idProduct}=="2145", MODE:="0666", SYMLINK+="/dev/bus/usb/medbg/tty"
+ACTION=="add", SUBSYSTEM=="hidraw", ATTRS{idVendor}=="03eb", ATTRS{idProduct}=="2145", MODE:="0666", SYMLINK+="/dev/bus/usb/medbg/hidraw"
+ACTION=="bind", SUBSYSTEM=="usb", ATTRS{idVendor}=="03eb", ATTRS{idProduct}=="2145", MODE:="0666", SYMLINK+="/dev/bus/usb/medbg/usb"
