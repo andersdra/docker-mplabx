@@ -4,7 +4,7 @@ AVR GCC, ARM GCC
 Microchip XC8, XC16, XC32
 
 - Easy update of IDE + toolchains  
-- Simple storage of specific environments
+- Simple storage and sharing of specific environments
 
 MPLAB X runs as an unprivileged user (inside container, docker daemon is always root!) with all container capabilities dropped except `mknod` which is needed for replugging to work.
 
