@@ -1,0 +1,2 @@
+#!/bin/bash
+docker build --build-arg AVRGCC=1 --build-arg ARMGCC=1 -f $DOCKERFILE_PATH -t $IMAGE_NAME .
