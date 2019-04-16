@@ -15,4 +15,4 @@ docker run \
  -v $PWD/MPLABX_Folders/mplab_ide:/mplabx/.mplab_ide \
  -v $PWD/MPLABX_Folders/mplabcomm:/mplabx/.mplabcomm \
  -v $PWD/MPLABX_Folders/oracle_jre_usage:/mplabx/.oracle_jre_usage \
-mplabx mplab_ipe
+andersdra/mplabx mplab_ipe

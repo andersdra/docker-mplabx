@@ -25,7 +25,7 @@ If that does not work the toolchains `/mplabx/toolchains/*/bin` folder must be m
 
 #### Default build
 
-	docker build --tag mplabx .
+	docker build --tag andersdra/mplabx .
 	docker-compose build
 
 #### Default build args
@@ -51,7 +51,7 @@ If that does not work the toolchains `/mplabx/toolchains/*/bin` folder must be m
 #### Local user UID, GUID + AVRGCC
 
 	docker build \
-	--tag mplabx \
+	--tag andersdra/mplabx \
 	--build-arg C_UID=$(id --user) \
 	--build-arg C_GUID=$(id --group) \
 	--build-arg AVRGCC=1 .
@@ -79,7 +79,7 @@ If that does not work the toolchains `/mplabx/toolchains/*/bin` folder must be m
 	-v $PWD/MPLABX_Folders/mplab_ide:/mplabx/.mplab_ide \
 	-v $PWD/MPLABX_Folders/mplabcomm:/mplabx/.mplabcomm \
 	-v $PWD/MPLABX_Folders/oracle_jre_usage:/mplabx/.oracle_jre_usage \
-	mplabx
+	andersdra/mplabx
 	
 # Info/Troubleshooting
 

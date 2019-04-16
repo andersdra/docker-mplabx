@@ -129,7 +129,7 @@ RUN mkdir -p /usr/share/man/man1 \
     && rm -rf /tmp/* \
     ;fi' \
 # Hackishly add toolchains to PATH
-# mplab_ide has to be delimited or else installation will exit since it greps ps for 'mplab_ide'
+# mplab_ide must be delimited or installation will exit
     && bash -c \
     'tcs=$(find /$C_USER/toolchains/ -maxdepth 1 -mindepth 1 -type d) \
     && path='' \
