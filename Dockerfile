@@ -15,6 +15,8 @@ ARG MPLABX_V520PLUS=1
 ARG MPLABX_IDE=1
 ARG MPLABX_IPE=0
 ARG MPLABX_TELEMETRY=0
+ARG MPLABX_DARCULA=1
+
 ARG AVRGCC=0
 ARG ARMGCC=0
 ARG MCPXC8=0
@@ -93,7 +95,8 @@ RUN mkdir -p /usr/share/man/man1 \
     && rm --recursive --force /usr/share/man/* \
     && rm --recursive --force /tmp/* \
     && rm --recursive --force /var/log/* \
-    && rm --recursive --force /var/lib/{apt,dpkg,cache,log}/
+    && rm --recursive --force /var/lib/{apt,dpkg,cache,log}/ \
+    && find / -maxdepth 1 -name "*.bash" -delete
 
 ENV USER=$C_USER
 ENV SHELL=/bin/bash

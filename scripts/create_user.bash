@@ -1,6 +1,7 @@
 #!/bin/bash
 # docker-mplabx
-if [ ! "$C_USER" = root ] ; then \
+if [ ! "$C_USER" = root ]
+then
   groupadd \
     --system "$C_USER" \
     --gid "$C_GUID" \

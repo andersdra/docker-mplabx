@@ -10,7 +10,7 @@ if [ "$MPLABX_V520PLUS" -eq 1 ]
   then
     if [ "$MPLABX_IDE" -eq 0 ] && [ "$MPLABX_IPE" -eq 0 ]
       then
-        exit 0 # only building with toolchains
+        exit 0 # no IDE/IPE
     fi
     install_cmd+=$(printf " %q" '--ide' "$MPLABX_IDE")
     install_cmd+=$(printf " %q" '--ipe' "$MPLABX_IPE")
@@ -42,7 +42,7 @@ else # Older version
         echo "Installing MPLAB X version < 5.20"
     else
         echo "Not installing MPLAB X"
-        exit 0 # 'toolchain only' container
+        exit 0 # no IDE/IPE
     fi
 fi
 
@@ -50,5 +50,11 @@ curl --location "$MPLABX_URL" > '/tmp/mplabx_installer.tar' \
 && tar xf '/tmp/mplabx_installer.tar' -C /tmp
 
 bash -c "$install_cmd"
+
+if [ "$MPLABX_DARCULA" -eq 1 ]
+  then
+    echo "Downloading Darcula Theme"
+    curl http://plugins.netbeans.org/download/plugin/9293 > "/home/$C_USER/darcula_theme.nbm"
+fi
 
 rm --recursive --force "/tmp/*"
