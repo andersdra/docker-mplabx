@@ -6,7 +6,7 @@ Microchip XC8, XC16, XC32
 - Easy update of IDE + toolchains  
 - Simple storage and sharing of specific environments
 
-As of V5.20 the installer allows for skipping 8/16/32bit headers, shrinking the size of IDE + AVRGCC from >5GB to aprox 2.09GB.  
+As of v5.20 the installer allows for skipping of 8/16/32bit headers, shrinking the size of IDE + AVRGCC from >5GB to aprox 2.09GB.  
 
 ## Getting started
 
@@ -38,6 +38,7 @@ If that does not work the toolchains `/mplabx/toolchains/*/bin` folder must be m
 	C_USER=mplabx
 	C_UID=1000
 	C_GUID=1000
+    C_HOME="/home/${C_USER}"
 
     MPLABX_V520PLUS=1 # 0 for < V5.20
 	MPLABX_IDE=1
@@ -61,11 +62,11 @@ If that does not work the toolchains `/mplabx/toolchains/*/bin` folder must be m
 	MCPXC16_URL
 	MCPXC32_URL
 	
-	
+    DARCULA_URL	
 
-Example for building V5.15:
+Example for building v5.15:
 
-`docker build --tag andersdra/mplabx --build-arg MPLABX_V520PLUS=0 --build-arg MPLABX_URL='https://ww1.microchip.com/downloads/en/DeviceDoc/MPLABX-v5.15-linux-installer.tar' .`
+`docker build --tag andersdra/mplabx515 --build-arg MPLABX_V520PLUS=0 --build-arg MPLABX_URL='https://ww1.microchip.com/downloads/en/DeviceDoc/MPLABX-v5.15-linux-installer.tar' .`
 
 #### Local user UID, GUID + AVRGCC
 
@@ -75,11 +76,6 @@ Example for building V5.15:
 	--build-arg C_GUID=$(id --group) \
 	--build-arg AVRGCC=1 .
 	
-	docker-compose build \
-	-e C_UID=$(id --user) \
-	-e C_GUID=$(id --group) \
-	-e AVRGCC=1
-
 ### Running
 
 	docker run \
