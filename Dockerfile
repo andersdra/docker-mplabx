@@ -77,8 +77,8 @@ RUN mkdir -p /usr/share/man/man1 \
 # If root owns anything in $HOME chown
     && bash -c \
       'if [ ! $C_USER = root ] ; then \
-        chmod --recursive 755 /$C_USER \
-        && chown --recursive --from=0:0 $C_USER:$C_USER /$C_USER \
+        chmod --recursive 755 /home/$C_USER \
+        && chown --recursive --from=0:0 $C_USER:$C_USER /home/$C_USER \
       ;fi' \
 # Remove install dependencies etc.
     && apt-get -qq purge --auto-remove --yes \
@@ -97,9 +97,9 @@ RUN mkdir -p /usr/share/man/man1 \
 
 ENV USER=$C_USER
 ENV SHELL=/bin/bash
-ENV HOME=/$C_USER
+ENV HOME=/home/$C_USER
 
 USER $C_USER
-WORKDIR /$C_USER
+WORKDIR /home/$C_USER
 
 CMD ["/mplab_start.sh"]

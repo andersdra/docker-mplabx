@@ -2,19 +2,20 @@
 # docker-mplabx
 # download and install toolchains
 
-mkdir "/$C_USER/toolchains"
+toolchain_folder="/home/$C_USER/toolchains"
+mkdir "$toolchain_folder"
 
 # AVR GCC
 if [ "$AVRGCC" -eq 1 ] ; then \
   curl --location "$AVRGCC_URL" > /tmp/avr-toolchain \
-  && tar xf '/tmp/avr-toolchain' -C "/$C_USER/toolchains" \
+  && tar xf '/tmp/avr-toolchain' -C "$toolchain_folder" \
   && rm --recursive --force /tmp/* \
 ;fi
 
 # ARM GCC
 if [ "$ARMGCC" -eq 1 ] ; then \
   curl --location "$ARMGCC_URL" > /tmp/arm-toolchain \
-  && tar xf '/tmp/arm-toolchain' -C "/$C_USER/toolchains" \
+  && tar xf '/tmp/arm-toolchain' -C "$toolchain_folder" \
   && rm --recursive --force /tmp/* \
 ;fi
 
@@ -26,7 +27,7 @@ if [ "$MCPXC8" -eq 1 ] ; then \
     --mode unattended \
     --netservername localhost \
     --LicenseType FreeMode \
-    --prefix "/$C_USER/toolchains/xc8" \
+    --prefix "$toolchain_folder/xc8" \
   && rm --recursive --force /tmp/* \
 ;fi
 
@@ -38,7 +39,7 @@ if [ "$MCPXC16" -eq 1 ] ; then \
     --mode unattended \
     --netservername localhost \
     --LicenseType FreeMode \
-    --prefix "/$C_USER/toolchains/xc16" \
+    --prefix "$toolchain_folder/xc16" \
   && rm --recursive --force /tmp/* \
 ;fi
 
@@ -50,6 +51,6 @@ if [ "$MCPXC32" -eq 1 ] ; then \
     --mode unattended \
     --netservername localhost \
     --LicenseType FreeMode \
-    --prefix "/$C_USER/toolchains/xc32" \
+    --prefix "$toolchain_folder/xc32" \
   && rm --recursive --force /tmp/* \
 ;fi

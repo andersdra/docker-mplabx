@@ -4,10 +4,14 @@
 
 install_cmd="USER=root /tmp/*-linux-installer.sh -- \
            --mode unattended \
-           --installdir /$C_USER"
+           --installdir /home/$C_USER"
 
 if [ "$MPLABX_V520PLUS" -eq 1 ]
   then
+    if [ "$MPLABX_IDE" -eq 0 ] && [ "$MPLABX_IPE" -eq 0 ]
+      then
+        exit 0 # only building with toolchains
+    fi
     install_cmd+=$(printf " %q" '--ide' "$MPLABX_IDE")
     install_cmd+=$(printf " %q" '--ipe' "$MPLABX_IPE")
     install_cmd+=$(printf " %q" '--collectInfo' "$MPLABX_TELEMETRY")
@@ -38,6 +42,7 @@ else # Older version
         echo "Installing MPLAB X version < 5.20"
     else
         echo "Not installing MPLAB X"
+        exit 0 # 'toolchain only' container
     fi
 fi
 
