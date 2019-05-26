@@ -129,5 +129,5 @@ AVR and MPLAB are registered trademarks of Microchip in the U.S.A. and other cou
 
 # License
 
-This software is licensed under the BSD-2-Clause License.  
+This software is licensed under the MIT License.  
 See LICENSE for more information.
