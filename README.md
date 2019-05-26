@@ -43,6 +43,8 @@ If that does not work the toolchains `/mplabx/toolchains/*/bin` folder must be m
 	MPLABX_IDE=1
     MPLABX_IPE=0
     MPLABX_TELEMETRY=0
+    MPLABX_DARCULA=1
+
 	AVRGCC=0
 	ARMGCC=0
 	MCPXC8=0
