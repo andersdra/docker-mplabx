@@ -2,7 +2,7 @@
 # docker-mplabx
 # hackish PATH startup script
 
-tcs=$(find "/home/$C_USER/toolchains/" -maxdepth 1 -mindepth 1 -type d)
+tcs=$(find "$C_HOME/toolchains/" -maxdepth 1 -mindepth 1 -type d)
 path=''
 
 for entry in $tcs;

@@ -2,7 +2,7 @@
 # docker-mplabx
 # download and install toolchains
 
-toolchain_folder="/home/$C_USER/toolchains"
+toolchain_folder="$C_HOME/toolchains"
 mkdir "$toolchain_folder"
 
 # AVR GCC

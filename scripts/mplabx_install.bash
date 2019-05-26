@@ -4,7 +4,7 @@
 
 install_cmd="USER=root /tmp/*-linux-installer.sh -- \
            --mode unattended \
-           --installdir /home/$C_USER"
+           --installdir $C_HOME"
 
 if [ "$MPLABX_V520PLUS" -eq 1 ]
   then
@@ -12,6 +12,7 @@ if [ "$MPLABX_V520PLUS" -eq 1 ]
       then
         exit 0 # no IDE/IPE
     fi
+
     install_cmd+=$(printf " %q" '--ide' "$MPLABX_IDE")
     install_cmd+=$(printf " %q" '--ipe' "$MPLABX_IPE")
     install_cmd+=$(printf " %q" '--collectInfo' "$MPLABX_TELEMETRY")
@@ -25,16 +26,14 @@ if [ "$MPLABX_V520PLUS" -eq 1 ]
 
 install_cmd+=$(printf " %q" '--16bitmcu' "$MCPXC16")
 
-if [ "$ARMGCC" -eq 1 ] || [ "$MCPXC32" -eq 1 ]
-  then
-    install_cmd+=$(printf " %q" '--32bitmcu' 1)
-  else
-    install_cmd+=$(printf " %q" '--32bitmcu' 0)
-fi
+    if [ "$ARMGCC" -eq 1 ] || [ "$MCPXC32" -eq 1 ]
+      then
+        install_cmd+=$(printf " %q" '--32bitmcu' 1)
+      else
+        install_cmd+=$(printf " %q" '--32bitmcu' 0)
+    fi
 
 install_cmd+=$(printf " %q" '--othermcu' "$OTHERMCU")
-echo "STARTING INSTALLATION OF MPLAB X"
-echo "$install_cmd"
 
 else # Older version
     if [ "$MPLABX_IDE" -eq 1 ]
@@ -54,7 +53,7 @@ bash -c "$install_cmd"
 if [ "$MPLABX_DARCULA" -eq 1 ]
   then
     echo "Downloading Darcula Theme"
-    curl http://plugins.netbeans.org/download/plugin/9293 > "/home/$C_USER/darcula_theme.nbm"
+    curl "$DARCULA_URL" > "$C_HOME/darcula_theme.nbm"
 fi
 
 rm --recursive --force "/tmp/*"

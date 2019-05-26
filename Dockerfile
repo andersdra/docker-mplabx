@@ -8,6 +8,7 @@ LABEL maintainer="Anders Drågen <andersdra@gmail.com>"
 
 ARG DEBIAN_FRONTEND=noninteractive
 ARG C_USER=mplabx
+ARG C_HOME="/home/${C_USER}"
 ARG C_UID=1000
 ARG C_GUID=1000
 
@@ -24,6 +25,7 @@ ARG MCPXC16=0
 ARG MCPXC32=0
 ARG OTHERMCU=0
 
+ARG DARCULA_URL='http://plugins.netbeans.org/download/plugin/9293'
 ARG MPLABX_URL='https://www.microchip.com/mplabx-ide-linux-installer'
 ARG AVRGCC_URL='https://www.microchip.com/mymicrochip/filehandler.aspx?ddocname=en607660'
 ARG ARMGCC_URL='https://www.microchip.com/mymicrochip/filehandler.aspx?ddocname=en603996'
@@ -79,8 +81,8 @@ RUN mkdir -p /usr/share/man/man1 \
 # If root owns anything in $HOME chown
     && bash -c \
       'if [ ! $C_USER = root ] ; then \
-        chmod --recursive 755 /home/$C_USER \
-        && chown --recursive --from=0:0 $C_USER:$C_USER /home/$C_USER \
+        chmod --recursive 755 $C_HOME \
+        && chown --recursive --from=0:0 $C_USER:$C_USER $C_HOME \
       ;fi' \
 # Remove install dependencies etc.
     && apt-get -qq purge --auto-remove --yes \
@@ -100,9 +102,9 @@ RUN mkdir -p /usr/share/man/man1 \
 
 ENV USER=$C_USER
 ENV SHELL=/bin/bash
-ENV HOME=/home/$C_USER
+ENV HOME=$C_HOME
 
 USER $C_USER
-WORKDIR /home/$C_USER
+WORKDIR $C_HOME
 
 CMD ["/mplab_start.sh"]
