@@ -6,7 +6,7 @@ Microchip XC8, XC16, XC32
 - Easy update of IDE + toolchains  
 - Simple storage and sharing of specific environments
 
-As of v5.20 the installer allows for skipping of 8/16/32bit headers, shrinking the size of IDE + AVRGCC from >5GB to aprox 2.09GB.  
+As of v5.20 the installer allows for skipping of 8/16/32bit support, shrinking the size of IDE + AVRGCC from >5GB to aprox 2.09GB.  
 
 ## Getting started
 
