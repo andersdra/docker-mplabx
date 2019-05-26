@@ -1,4 +1,4 @@
-# Containerized MPLAB X IDE, IPE
+# MPLAB X IDE/IPE docker container 
 
 AVR GCC, ARM GCC  
 Microchip XC8, XC16, XC32
@@ -6,19 +6,24 @@ Microchip XC8, XC16, XC32
 - Easy update of IDE + toolchains  
 - Simple storage and sharing of specific environments
 
-MPLAB X runs as an unprivileged user (inside container, docker daemon is always root!) with all container capabilities dropped except `mknod` which is needed for replugging to work.
+As of V5.20 the installer allows for skipping 8/16/32bit headers, shrinking the size of IDE + AVRGCC from >5GB to aprox 2.09GB.  
 
-Mounts the hosts X11 socket read-only so beware, never use untrusted prebuilt images that does this.  
+## Getting started
+
 Assumes host user is in `docker` group.
 
-# Getting started
+MPLAB X runs as an unprivileged user inside container, docker daemon is always root!  
+All container capabilities are dropped except `mknod` which is needed for replugging of development boards/programmers to work.
+
+Mounts the hosts X11 socket read-only so beware, never use untrusted prebuilt images that does this.  
 
 To avoid permission problems run `./folder_structure.sh` to generate local runtime/settings folders plus a project folder.  
 Keep a backup when updating the image, you will be asked what you want to import including plugins.  
 **To use USB from inside the container** it is necessary that udev rules from `z99-custom-microchip.rules` are active.
 
 #### Adding toolchains:  
-**Tools -> Options -> Embedded -> Build Tools -> Scan for Build Tools**  
+Tools -> Options -> Embedded -> Build Tools -> Scan for Build Tools  
+
 If that does not work the toolchains `/mplabx/toolchains/*/bin` folder must be manually added.
 
 ## Building  
@@ -33,21 +38,33 @@ If that does not work the toolchains `/mplabx/toolchains/*/bin` folder must be m
 	C_USER=mplabx
 	C_UID=1000
 	C_GUID=1000
-	MPLABX=1
+
+    MPLABX_V520PLUS=1 # 0 for < V5.20
+	MPLABX_IDE=1
+    MPLABX_IPE=0
+    MPLABX_TELEMETRY=0
 	AVRGCC=0
 	ARMGCC=0
 	MCPXC8=0
 	MCPXC16=0
 	MCPXC32=0
+    OTHERMCU=0 # only valid for >= V5.20 (SERIALEE, HCSxxxx) (2.0MB)
 	
 #### Custom tool version args
 
-	MPLABX_URL *.run
+	MPLABX_URL *.tar
 	AVRGCC_URL * .tar
 	ARMGCC_URL * .tar
 	MCPXC8_URL * .run
 	MCPXC16_URL
 	MCPXC32_URL
+	
+	
+
+Example for building V5.15:
+
+`docker build --tag andersdra/mplabx --build-arg MPLABX_V520PLUS=0 --build-arg MPLABX_URL='https://ww1.microchip.com/downloads/en/DeviceDoc/MPLABX-v5.15-linux-installer.tar' .`
+
 #### Local user UID, GUID + AVRGCC
 
 	docker build \
