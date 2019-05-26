@@ -9,11 +9,11 @@ docker run \
  -e TZ=Europe/Oslo \
  -v /dev/bus/usb:/dev/bus/usb \
  -v /tmp/.X11-unix:/tmp/.X11-unix:ro \
- -v $PWD/MPLABX_Folders/MPLABXProjects:/mplabx/MPLABXProjects \
- -v $PWD/MPLABX_Folders/cache:/mplabx/.cache \
- -v $PWD/MPLABX_Folders/java:/mplabx/.java \
- -v $PWD/MPLABX_Folders/mchp_packs:/mplabx/.mchp_packs \
- -v $PWD/MPLABX_Folders/mplab_ide:/mplabx/.mplab_ide \
- -v $PWD/MPLABX_Folders/mplabcomm:/mplabx/.mplabcomm \
- -v $PWD/MPLABX_Folders/oracle_jre_usage:/mplabx/.oracle_jre_usage \
+ -v $PWD/MPLABX_Folders/MPLABXProjects:/home/mplabx/MPLABXProjects \
+ -v $PWD/MPLABX_Folders/cache:/home/mplabx/.cache \
+ -v $PWD/MPLABX_Folders/java:/home/mplabx/.java \
+ -v $PWD/MPLABX_Folders/mchp_packs:/home/mplabx/.mchp_packs \
+ -v $PWD/MPLABX_Folders/mplab_ide:/home/mplabx/.mplab_ide \
+ -v $PWD/MPLABX_Folders/mplabcomm:/home/mplabx/.mplabcomm \
+ -v $PWD/MPLABX_Folders/oracle_jre_usage:/home/mplabx/.oracle_jre_usage \
 andersdra/mplabx
