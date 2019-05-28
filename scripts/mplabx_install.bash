@@ -4,7 +4,7 @@
 
 install_cmd="USER=root /tmp/*-linux-installer.sh -- \
            --mode unattended \
-           --installdir $C_HOME"
+           --installdir $C_HOME/mplabx"
 
 if [ "$MPLABX_V520PLUS" -eq 1 ]
   then
@@ -24,7 +24,7 @@ if [ "$MPLABX_V520PLUS" -eq 1 ]
         install_cmd+=$(printf " %q" '--8bitmcu' 0)
     fi
 
-install_cmd+=$(printf " %q" '--16bitmcu' "$MCPXC16")
+    install_cmd+=$(printf " %q" '--16bitmcu' "$MCPXC16")
 
     if [ "$ARMGCC" -eq 1 ] || [ "$MCPXC32" -eq 1 ]
       then
@@ -33,7 +33,7 @@ install_cmd+=$(printf " %q" '--16bitmcu' "$MCPXC16")
         install_cmd+=$(printf " %q" '--32bitmcu' 0)
     fi
 
-install_cmd+=$(printf " %q" '--othermcu' "$OTHERMCU")
+    install_cmd+=$(printf " %q" '--othermcu' "$OTHERMCU")
 
 else # Older version
     if [ "$MPLABX_IDE" -eq 1 ]
@@ -48,6 +48,8 @@ fi
 curl --location "$MPLABX_URL" > '/tmp/mplabx_installer.tar' \
 && tar xf '/tmp/mplabx_installer.tar' -C /tmp
 
+rm /tmp/mplabx_installer.tar
+
 bash -c "$install_cmd"
 
 if [ "$MPLABX_DARCULA" -eq 1 ]
@@ -56,4 +58,4 @@ if [ "$MPLABX_DARCULA" -eq 1 ]
     curl "$DARCULA_URL" > "$C_HOME/darcula_theme.nbm"
 fi
 
-rm --recursive --force "/tmp/*"
+rm --recursive --force /tmp/*

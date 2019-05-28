@@ -7,6 +7,7 @@ Microchip XC8, XC16, XC32
 - Simple storage and sharing of specific environments
 
 As of v5.20 the installer allows for skipping of 8/16/32bit support, shrinking the size of IDE + AVRGCC from >5GB to aprox 2.09GB.  
+16bit, 32bit and harmony is untested  
 
 ## Getting started
 
@@ -51,18 +52,23 @@ If that does not work the toolchains `/mplabx/toolchains/*/bin` folder must be m
 	MCPXC8=0
 	MCPXC16=0
 	MCPXC32=0
-    OTHERMCU=0 # only valid for >= V5.20 (SERIALEE, HCSxxxx) (2.0MB)
+
+	PIC32_LEGACY=0
+	MPLAB_HARMONY=0
+	OTHERMCU=0 # only valid for >= V5.20 (SERIALEE, HCSxxxx) (2.0MB)
 	
 #### Custom tool version args
 
 	MPLABX_URL *.tar
-	AVRGCC_URL * .tar
-	ARMGCC_URL * .tar
-	MCPXC8_URL * .run
+	AVRGCC_URL *.tar
+	ARMGCC_URL *.tar
+	MCPXC8_URL *.run
 	MCPXC16_URL
 	MCPXC32_URL
 	
-    DARCULA_URL	
+	MPLAB_HARMONY_URL *.run
+	PIC32_LEGACY_URL *.tar
+	DARCULA_URL	*.nbm
 
 Example for building v5.15:
 

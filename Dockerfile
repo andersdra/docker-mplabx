@@ -23,6 +23,8 @@ ARG ARMGCC=0
 ARG MCPXC8=0
 ARG MCPXC16=0
 ARG MCPXC32=0
+ARG PIC32_LEGACY=0
+ARG MPLAB_HARMONY=0
 ARG OTHERMCU=0
 
 ARG DARCULA_URL='http://plugins.netbeans.org/download/plugin/9293'
@@ -32,6 +34,8 @@ ARG ARMGCC_URL='https://www.microchip.com/mymicrochip/filehandler.aspx?ddocname=
 ARG MCPXC8_URL='https://www.microchip.com/mplabxc8linux'
 ARG MCPXC16_URL='https://www.microchip.com/mplabxc16linux'
 ARG MCPXC32_URL='https://www.microchip.com/mplabxc32linux'
+ARG MPLAB_HARMONY_URL='https://www.microchip.com/mymicrochip/filehandler.aspx?ddocname=en606318'
+ARG PIC32_LEGACY_URL='http://ww1.microchip.com/downloads/en//softwarelibrary/pic32%20peripheral%20library/pic32%20legacy%20peripheral%20libraries%20linux%20(2).tar'
 
 COPY scripts/create_user.bash /
 COPY scripts/startup_script.bash /
@@ -68,13 +72,11 @@ RUN mkdir -p /usr/share/man/man1 \
       make \
       procps \
       x11-utils \
-    && chmod u+x /create_user.bash \
+    && chmod u+x /*.bash \
     && /create_user.bash \
 # IDE/IPE install
-    && chmod u+x /mplabx_install.bash \
     && /mplabx_install.bash \
 # Toolchains
-    && chmod u+x /toolchain_install.bash \
     && /toolchain_install.bash \
 # Setup startup script with updated PATH
     && /startup_script.bash \
@@ -84,20 +86,11 @@ RUN mkdir -p /usr/share/man/man1 \
         chmod --recursive 755 $C_HOME \
         && chown --recursive --from=0:0 $C_USER:$C_USER $C_HOME \
       ;fi' \
-# Remove install dependencies etc.
-    && apt-get -qq purge --auto-remove --yes \
-      curl \
-      libasound2 \
-      libasound2-data \
-      procps \
-      systemd \
-      systemd-sysv \
     && apt-get -qq clean autoclean \
-    && apt-get -qq autoremove --yes \
     && rm --recursive --force /usr/share/man/* \
     && rm --recursive --force /tmp/* \
     && rm --recursive --force /var/log/* \
-    && rm --recursive --force /var/lib/{apt,dpkg,cache,log}/ \
+    && bash -c 'rm --recursive --force /var/lib/{apt,dpkg,cache,log}/' \
     && find / -maxdepth 1 -name "*.bash" -delete
 
 ENV USER=$C_USER
