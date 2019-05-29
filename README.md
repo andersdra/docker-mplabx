@@ -115,7 +115,9 @@ Re-run created containers by their name from any folder
 
 Delete cache folder content if anything stops working as expected in IDE.
 
-[List of TZ database time zones](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) 
+[**List of TZ database time zones**](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) 
+
+[**Missing header files**](doc/header_include_path.png)
 
 ### Microchip XC Compiler License options
 

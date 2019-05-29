@@ -4,7 +4,7 @@
 # Source and docs: https://gitlab.com/andersdra/docker-mplabx
 FROM debian:buster-20190506-slim
 
-LABEL maintainer="Anders Drågen <andersdra@gmail.com>"
+LABEL maintainer="Anders Draagen <andersdra@gmail.com>"
 
 ARG DEBIAN_FRONTEND=noninteractive
 ARG C_USER=mplabx
@@ -90,7 +90,7 @@ RUN mkdir -p /usr/share/man/man1 \
     && rm --recursive --force /usr/share/man/* \
     && rm --recursive --force /tmp/* \
     && rm --recursive --force /var/log/* \
-    && bash -c 'rm --recursive --force /var/lib/{apt,dpkg,cache,log}/' \
+    && bash -c 'rm --recursive --force /var/lib/{apt,dpkg,cache,log}/*' \
     && find / -maxdepth 1 -name "*.bash" -delete
 
 ENV USER=$C_USER

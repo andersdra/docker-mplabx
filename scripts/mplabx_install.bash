@@ -3,8 +3,7 @@
 # install script for MPLAB X IDE/IPE
 
 install_cmd="USER=root /tmp/*-linux-installer.sh -- \
-           --mode unattended \
-           --installdir $C_HOME/mplabx"
+           --mode unattended"
 
 if [ "$MPLABX_V520PLUS" -eq 1 ]
   then
@@ -45,6 +44,7 @@ else # Older version
     fi
 fi
 
+printf '\nMPLAB X\n'
 curl --location "$MPLABX_URL" > '/tmp/mplabx_installer.tar' \
 && tar xf '/tmp/mplabx_installer.tar' -C /tmp
 

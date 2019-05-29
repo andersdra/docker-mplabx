@@ -10,5 +10,4 @@ if [ ! "$C_USER" = root ]
     --system --gid "$C_USER" \
     --create-home --home-dir "$C_HOME" \
     --shell /sbin/nologin "$C_USER" \
-
-fi
+;fi
