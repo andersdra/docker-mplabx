@@ -52,7 +52,7 @@ if [ "$CUSTOM_VERSION" -gt 0 ]
     MPLABX_URL="https://ww1.microchip.com/downloads/en/DeviceDoc/MPLABX-v$MPLABX_VERSION-linux-installer.tar"
 fi
 
-printf '\nMPLAB X\n'"
+printf '\nMPLAB X\n'
 
 curl --location "$MPLABX_URL" > '/tmp/mplabx_installer.tar' \
 && tar xf '/tmp/mplabx_installer.tar' -C /tmp
