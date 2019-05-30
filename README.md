@@ -25,7 +25,7 @@ Keep a backup when updating the image, you will be asked what you want to import
 #### Adding toolchains:  
 Tools -> Options -> Embedded -> Build Tools -> Scan for Build Tools  
 
-If that does not work the toolchains `/mplabx/toolchains/*/bin` folder must be manually added.
+[**Missing header files**](doc/header_include_path.png)
 
 ## Building  
 
@@ -41,11 +41,11 @@ If that does not work the toolchains `/mplabx/toolchains/*/bin` folder must be m
 	C_GUID=1000
     C_HOME="/home/${C_USER}"
 
-    MPLABX_V520PLUS=1 # 0 for < V5.20
 	MPLABX_IDE=1
     MPLABX_IPE=0
     MPLABX_TELEMETRY=0
     MPLABX_DARCULA=1
+    MPLABX_VERSION=0 # latest version
 
 	AVRGCC=0
 	ARMGCC=0
@@ -58,8 +58,7 @@ If that does not work the toolchains `/mplabx/toolchains/*/bin` folder must be m
 	OTHERMCU=0 # only valid for >= V5.20 (SERIALEE, HCSxxxx) (2.0MB)
 	
 #### Custom tool version args
-
-	MPLABX_URL *.tar
+    
 	AVRGCC_URL *.tar
 	ARMGCC_URL *.tar
 	MCPXC8_URL *.run
@@ -72,7 +71,7 @@ If that does not work the toolchains `/mplabx/toolchains/*/bin` folder must be m
 
 Example for building v5.15:
 
-`docker build --tag andersdra/mplabx515 --build-arg MPLABX_V520PLUS=0 --build-arg MPLABX_URL='https://ww1.microchip.com/downloads/en/DeviceDoc/MPLABX-v5.15-linux-installer.tar' .`
+`docker build --tag andersdra/mplabx515 --build-arg MPLABX_VERSION=5.15 .`
 
 #### Local user UID, GUID + AVRGCC
 
@@ -116,8 +115,6 @@ Re-run created containers by their name from any folder
 Delete cache folder content if anything stops working as expected in IDE.
 
 [**List of TZ database time zones**](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) 
-
-[**Missing header files**](doc/header_include_path.png)
 
 ### Microchip XC Compiler License options
 

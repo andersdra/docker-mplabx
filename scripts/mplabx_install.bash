@@ -5,7 +5,10 @@
 install_cmd="USER=root /tmp/*-linux-installer.sh -- \
            --mode unattended"
 
-if [ "$MPLABX_V520PLUS" -eq 1 ]
+CUSTOM_VERSION=$(bc -l <<< "$MPLABX_VERSION > 0")
+V520PLUS=$(bc -l <<< "$MPLABX_VERSION >= 5.20")
+
+if [ "$CUSTOM_VERSION" -eq 0 ] || [ "$V520PLUS" -eq 1 ]
   then
     if [ "$MPLABX_IDE" -eq 0 ] && [ "$MPLABX_IPE" -eq 0 ]
       then
@@ -44,7 +47,13 @@ else # Older version
     fi
 fi
 
-printf '\nMPLAB X\n'
+if [ "$CUSTOM_VERSION" -gt 0 ]
+  then
+    MPLABX_URL="https://ww1.microchip.com/downloads/en/DeviceDoc/MPLABX-v$MPLABX_VERSION-linux-installer.tar"
+fi
+
+printf '\nMPLAB X\n'"
+
 curl --location "$MPLABX_URL" > '/tmp/mplabx_installer.tar' \
 && tar xf '/tmp/mplabx_installer.tar' -C /tmp
 
