@@ -1,2 +1,29 @@
 #!/bin/bash
-docker build --build-arg AVRGCC=1 --build-arg ARMGCC=1 -f $DOCKERFILE_PATH -t $IMAGE_NAME .
+# if ENV is not supplied from docker hub, set to default
+# guessing this is not the way to go, but (maybe) good enough for now
+
+if [ -z "$MPLABX_VERSION" ] ; then MPLABX_VERSION=0 ; fi
+if [ -z "$MPLABX_IDE" ] ; then MPLABX_IDE=1 ;fi
+if [ -z "$MPLABX_IPE" ] ; then MPLABX_IPE=0 ;fi
+if [ -z "$AVRGCC" ] ; then AVRGCC=0 ; fi
+if [ -z "$ARMGCC" ] ; then ARMGCC=0 ; fi
+if [ -z "$MCPXC8" ] ; then MCPXC8=0 ; fi
+if [ -z "$MCPXC16" ] ; then MCPXC16=0 ; fi
+if [ -z "$MCPXC32" ] ; then MCPXC32=0 ; fi
+if [ -z "$PIC32_LEGACY" ] ; then PIC32_LEGACY=0 ; fi
+if [ -z "$MPLAB_HARMONY" ] ; then MPLAB_HARMONY=0 ; fi
+if [ -z "$OTHERMCU"  ] ; then OTHERMCU=0 ; fi
+
+docker build \
+--build-arg MPLABX_VERSION="$MPLABX_VERSION" \
+--build-arg MPLABX_IDE="$MPLABX_IDE" \
+--build-arg MPLABX_IPE="$MPLABX_IPE" \
+--build-arg AVRGCC="$AVRGCC" \
+--build-arg ARMGCC="$ARMGCC" \
+--build-arg MCPXC8="$MCPXC8" \
+--build-arg MCPXC16="$MCPXC16" \
+--build-arg MCPXC32="$MCPXC32" \
+--build-arg PIC32_LEGACY="$PIC32_LEGACY" \
+--build-arg MPLAB_HARMONY="$MPLAB_HARMONY" \
+--build-arg OTHERMCU="$OTHERMCU" \
+-f "$DOCKERFILE_PATH" -t "$IMAGE_NAME" .
