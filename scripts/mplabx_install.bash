@@ -3,12 +3,13 @@
 # install script for MPLAB X IDE/IPE
 
 install_cmd="USER=root /tmp/*-linux-installer.sh -- \
-           --mode unattended"
+           --mode unattended \
+           --collectInfo $MPLABX_TELEMETRY"
 
 CUSTOM_VERSION=$(bc -l <<< "$MPLABX_VERSION > 0")
-V520PLUS=$(bc -l <<< "$MPLABX_VERSION >= 5.20")
+V510PLUS=$(bc -l <<< "$MPLABX_VERSION >= 5.10")
 
-if [ "$CUSTOM_VERSION" -eq 0 ] || [ "$V520PLUS" -eq 1 ]
+if [ "$CUSTOM_VERSION" -eq 0 ] || [ "$V510PLUS" -eq 1 ]
   then
     if [ "$MPLABX_IDE" -eq 0 ] && [ "$MPLABX_IPE" -eq 0 ]
       then
@@ -17,7 +18,6 @@ if [ "$CUSTOM_VERSION" -eq 0 ] || [ "$V520PLUS" -eq 1 ]
 
     install_cmd+=$(printf " %q" '--ide' "$MPLABX_IDE")
     install_cmd+=$(printf " %q" '--ipe' "$MPLABX_IPE")
-    install_cmd+=$(printf " %q" '--collectInfo' "$MPLABX_TELEMETRY")
 
     if [ "$AVRGCC" -eq 1 ] || [ "$MCPXC8" -eq 1 ]
       then
@@ -40,7 +40,7 @@ if [ "$CUSTOM_VERSION" -eq 0 ] || [ "$V520PLUS" -eq 1 ]
 else # Older version
     if [ "$MPLABX_IDE" -eq 1 ]
       then
-        echo "Installing MPLAB X version < 5.20"
+        echo "Installing MPLAB X version < 5.10"
     else
         echo "Not installing MPLAB X"
         exit 0 # no IDE/IPE
