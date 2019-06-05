@@ -34,9 +34,11 @@ if [ "$CUSTOM_VERSION" -eq 0 ] || [ "$V510PLUS" -eq 1 ]
       else
         install_cmd+=$(printf " %q" '--32bitmcu' 0)
     fi
-
-    install_cmd+=$(printf " %q" '--othermcu' "$OTHERMCU")
-
+    V520PLUS=$(bc -l <<< "$MPLABX_VERSION >= 5.20")
+    if [ "$V520PLUS" -eq 1 ]
+    then
+      install_cmd+=$(printf " %q" '--othermcu' "$OTHERMCU")
+    fi
 else # Older version
     if [ "$MPLABX_IDE" -eq 1 ]
       then

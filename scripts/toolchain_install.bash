@@ -71,7 +71,7 @@ if [ "$MCPXC32" -eq 1 ]
         curl "$PIC32_LEGACY_URL" > /tmp/pic32_legacy \
         && tar xf /tmp/pic32_legacy -C /tmp \
         && rm /tmp/pic32_legacy \
-        && /tmp/*Libraries.run --mode unattended \
+        && $(find /tmp -name "*Libraries.run") --mode unattended \
            --prefix /opt/microchip/ \
         && rm -rf /tmp/*
     fi
@@ -82,6 +82,7 @@ if [ "$MCPXC32" -eq 1 ]
         curl -L "$MPLAB_HARMONY_URL" > /tmp/mplab_harmony \
         && chmod +x /tmp/mplab_harmony \
         && /tmp/mplab_harmony --mode unattended \
+           --prefix /opt/microchip/ \
         && rm -rf /tmp/*
     fi
 fi
