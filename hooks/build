@@ -2,7 +2,7 @@
 # if ENV is not supplied from docker hub, set to default
 # guessing this is not the way to go, but (maybe) good enough for now
 
-if [ -z "$MPLABX_VERSION" ] ; then MPLABX_VERSION=0 ; fi
+if [ -z "$MPLABX_VERSION" ] ; then MPLABX_VERSION=5.25 ; fi
 if [ -z "$MPLABX_IDE" ] ; then MPLABX_IDE=1 ;fi
 if [ -z "$MPLABX_IPE" ] ; then MPLABX_IPE=0 ;fi
 if [ -z "$AVRGCC" ] ; then AVRGCC=0 ; fi
