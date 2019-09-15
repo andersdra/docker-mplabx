@@ -10,5 +10,5 @@ do
   path="$entry/bin:$path"
 done
 
-printf '#!/bin/sh\nPATH="%s%s" && mplab_ide' "$path" "$PATH" > /mplab_start.sh
+printf '#!/bin/sh\nexport PATH="%s%s" && mplab_ide' "$path" "$PATH" > /mplab_start.sh
 chmod 775 /mplab_start.sh
