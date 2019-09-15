@@ -47,6 +47,7 @@ Tools -> Options -> Embedded -> Build Tools -> Scan for Build Tools
     MPLABX_DARCULA=1
     MPLABX_VERSION=0 # latest version
 
+    ARDUINO=0
 	AVRGCC=0
 	ARMGCC=0
 	MCPXC8=0
@@ -59,6 +60,7 @@ Tools -> Options -> Embedded -> Build Tools -> Scan for Build Tools
 	
 #### Custom tool version args
     
+    ARDUINO_URL *.tar.xz
 	AVRGCC_URL *.tar
 	ARMGCC_URL *.tar
 	MCPXC8_URL *.run
