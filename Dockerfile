@@ -18,6 +18,7 @@ ARG MPLABX_TELEMETRY=0
 ARG MPLABX_DARCULA=1
 ARG MPLABX_VERSION=0
 
+ARG ARDUINO=0
 ARG AVRGCC=0
 ARG ARMGCC=0
 ARG MCPXC8=0
@@ -27,6 +28,7 @@ ARG PIC32_LEGACY=0
 ARG MPLAB_HARMONY=0
 ARG OTHERMCU=0
 
+ARG ARDUINO_URL=''
 ARG DARCULA_URL='http://plugins.netbeans.org/download/plugin/9293'
 ARG MPLABX_URL='https://www.microchip.com/mplabx-ide-linux-installer'
 ARG AVRGCC_URL='https://www.microchip.com/mymicrochip/filehandler.aspx?ddocname=en607660'
