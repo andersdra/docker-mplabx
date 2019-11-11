@@ -130,7 +130,7 @@ AVR and MPLAB are registered trademarks of Microchip in the U.S.A. and other cou
 
 # Known Issues/Limitations
 
-- Current udev rules will allow only 1 PICKit4, 1 Atmel ICE, 1 mEDBG at the same time.  
+- ~~Current udev rules will allow only 1 PICKit4, 1 Atmel ICE, 1 mEDBG at the same time.~~  
 - ModemManager can mess with ttyACMx devices under re-enumeration: `root@host:# systemctl stop ModemManager.service`  
 - Moving a floating window to another workspace under GNOME crashes IDE.
 
