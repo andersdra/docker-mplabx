@@ -74,6 +74,7 @@ RUN mkdir -p /usr/share/man/man1 \
       libxxf86dga1 \
       make \
       procps \
+      xz-utils \
       x11-utils \
     && chmod u+x /*.bash \
     && /create_user.bash \
