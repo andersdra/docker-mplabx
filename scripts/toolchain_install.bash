@@ -77,12 +77,17 @@ fi
 if [ "$MCPXC32" -eq 1 ]
   then
     printf '\nMCP XC32\n'
-    curl --location "$MCPXC32_URL" > /tmp/xc32-installer \
-    && chmod u+x /tmp/xc32-installer \
+    curl --location "$MCPXC32_URL" > /tmp/xc32-installer
+    if grep -q ".tar" <<< "$MCPXC32_URL"
+      then
+        tar xf /tmp/xc32-installer -C /tmp \
+        && mv /tmp/xc32-*.run /tmp/xc32-installer
+    fi
+    chmod u+x /tmp/xc32-installer \
     && USER=root /tmp/xc32-installer \
       --mode unattended \
       --netservername localhost \
-      --LicenseType FreeMode \
+      $(/tmp/xc32-installer --help|grep "\-\-LicenseType">/dev/null && printf -- "--LicenseType FreeMode" || printf "") \
     && rm --recursive --force /tmp/*
 
     if [ "$PIC32_LEGACY" -eq 1 ]
@@ -91,7 +96,7 @@ if [ "$MCPXC32" -eq 1 ]
         curl "$PIC32_LEGACY_URL" > /tmp/pic32_legacy \
         && tar xf /tmp/pic32_legacy -C /tmp \
         && rm /tmp/pic32_legacy \
-        && $(find /tmp -name "*Libraries.run") --mode unattended \
+        && "$(find /tmp -name *Libraries.run)" --mode unattended \
            --prefix /opt/microchip/ \
         && rm -rf /tmp/*
     fi
