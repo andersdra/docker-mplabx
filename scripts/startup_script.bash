@@ -10,5 +10,10 @@ do
   path="$entry/bin:$path"
 done
 
-printf '#!/bin/sh\nexport PATH="%s%s" && mplab_ide' "$path" "$PATH" > /mplab_start.sh
+if [ "$MPLABX_IDE_START" -eq 1 ]
+  then
+    printf '#!/bin/sh\nexport PATH="%s%s" && mplab_ide' "$path" "$PATH" > /mplab_start.sh
+  else
+    printf '#!/bin/bash\nbash --login' > /mplab_start.sh
+fi
 chmod 775 /mplab_start.sh
