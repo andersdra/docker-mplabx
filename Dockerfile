@@ -12,6 +12,8 @@ ARG C_HOME="/home/${C_USER}"
 ARG C_UID=1000
 ARG C_GUID=1000
 
+ARG ADDITIONAL_PACKAGES=
+
 ARG MPLABX_IDE=1
 ARG MPLABX_IPE=0
 ARG MPLABX_TELEMETRY=0
@@ -76,6 +78,7 @@ RUN mkdir -p /usr/share/man/man1 \
       procps \
       xz-utils \
       x11-utils \
+      $ADDITIONAL_PACKAGES \
     && chmod u+x /*.bash \
     && /create_user.bash \
 # IDE/IPE install
