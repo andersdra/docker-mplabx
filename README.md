@@ -41,12 +41,14 @@ Tools -> Options -> Embedded -> Build Tools -> Scan for Build Tools
 	C_GUID=1000
     C_HOME="/home/${C_USER}"
 
+    MPLABX_IDE_START=1 // for toolchain only container
 	MPLABX_IDE=1
     MPLABX_IPE=0
     MPLABX_TELEMETRY=0
     MPLABX_DARCULA=1
     MPLABX_VERSION=0 # latest version
-
+    ADDITIONAL_PACKAGES='' // added to apt-get
+    
     ARDUINO=0
 	AVRGCC=0
 	ARMGCC=0
