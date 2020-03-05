@@ -2,7 +2,7 @@
 # AVR, ARM GCC
 # Microchip XC8, XC16, XC32 
 # Source and docs: https://gitlab.com/andersdra/docker-mplabx
-FROM debian:buster-20190910-slim
+FROM debian:buster-20200224-slim
 
 LABEL maintainer="Anders Draagen <andersdra@gmail.com>"
 
