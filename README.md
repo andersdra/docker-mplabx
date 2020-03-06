@@ -1,5 +1,8 @@
 # MPLAB X IDE/IPE docker container 
 
+# !! TOOLCHAIN INSTALL IS CURRENTLY BROKEN !!
+# Working on replacement. A MC user will be needed for downloading more than MPLAB X
+
 AVR GCC, ARM GCC  
 Microchip XC8, XC16, XC32
 
