@@ -25,45 +25,45 @@ fi
 # AVR GCC
 if [ "$AVRGCC" -eq 1 ]
   then
-    printf '\nAVRGCC\n'
-    curl --location "$AVRGCC_URL" > /tmp/avr-toolchain \
-    && tar xf '/tmp/avr-toolchain' -C /opt/ \
-    && rm --recursive --force /tmp/*
+    printf '\nAVRGCC\n' \
+    && tar xf "$DOWNLOAD_DIR"/avr8-gnu*.tar.gz -C /opt/
 fi
 
 # ARM GCC
 if [ "$ARMGCC" -eq 1 ]
   then
-    printf '\nARMGCC\n'
-    curl --location "$ARMGCC_URL" > /tmp/arm-toolchain \
-    && tar xf '/tmp/arm-toolchain' -C /opt/ \
-    && rm --recursive --force /tmp/*
+    printf '\nARMGCC\n' \
+    && tar xf "$DOWNLOAD_DIR"/arm-gnu*.tar.gz -C /opt/
 fi
 
 # XC8
 if [ "$MCPXC8" -eq 1 ]
   then
-    printf '\nMCP XC8\n'
-    curl --location "$MCPXC8_URL" > /tmp/xc8-installer \
-    && chmod u+x /tmp/xc8-installer \
-    && USER=root /tmp/xc8-installer \
+    printf '\nMCP XC8\n' \
+    && chmod u+x "$DOWNLOAD_DIR"/xc8*.run \
+    && USER=root "$DOWNLOAD_DIR"/xc8*.run \
        --mode unattended \
        --netservername localhost \
-       --LicenseType FreeMode \
-    && rm --recursive --force /tmp/*
+       --LicenseType FreeMode
 fi
 
 # XC16
 if [ "$MCPXC16" -eq 1 ]
   then
-    printf '\nMCP XC16\n'
-    curl --location "$MCPXC16_URL" > /tmp/xc16-installer \
-    && chmod u+x /tmp/xc16-installer \
-    && USER=root /tmp/xc16-installer \
+    printf '\nMCP XC16\n' \
+    && chmod u+x "$DOWNLOAD_DIR"/xc16*.run \
+    && USER=root "$DOWNLOAD_DIR"/xc16*.run \
        --mode unattended \
        --netservername localhost \
-       --LicenseType FreeMode \
-    && rm --recursive --force /tmp/*
+       --LicenseType FreeMode
+else
+    V535PLUS=$(bc -l <<< "$MPLABX_VERSION >= 5.35")
+    if [ "$MPLABX_VERSION" -eq 0 ] || [ "$V535PLUS" -eq 1 ]
+    then
+      rm -rf /opt/microchip/mplabx/v5.35/packs/Microchip/PIC*_DFP
+      rm -rf /opt/microchip/mplabx/v5.35/packs/Microchip/MCPxxxx_DFP
+      rm -rf /opt/microchip/mplabx/v5.35/mpasmx
+    fi
 fi
 
 # 32 bit PIC stuff
@@ -77,37 +77,32 @@ fi
 if [ "$MCPXC32" -eq 1 ]
   then
     printf '\nMCP XC32\n'
-    curl --location "$MCPXC32_URL" > /tmp/xc32-installer
     if grep -q ".tar" <<< "$MCPXC32_URL"
       then
         tar xf /tmp/xc32-installer -C /tmp \
         && mv /tmp/xc32-*.run /tmp/xc32-installer
     fi
-    chmod u+x /tmp/xc32-installer \
-    && USER=root /tmp/xc32-installer \
+    chmod u+x "$DOWNLOAD_DIR"/xc32*.run \
+    && USER=root "$DOWNLOAD_DIR"/xc32*.run \
       --mode unattended \
       --netservername localhost \
-      $(/tmp/xc32-installer --help|grep "\-\-LicenseType">/dev/null && printf -- "--LicenseType FreeMode" || printf "") \
-    && rm --recursive --force /tmp/*
+      --LicenseType FreeMode
 
     if [ "$PIC32_LEGACY" -eq 1 ]
       then
-        printf '\nPIC32 Legacy\n'
-        curl "$PIC32_LEGACY_URL" > /tmp/pic32_legacy \
-        && tar xf /tmp/pic32_legacy -C /tmp \
-        && rm /tmp/pic32_legacy \
-        && "$(find /tmp -name *Libraries.run)" --mode unattended \
-           --prefix /opt/microchip/ \
-        && rm -rf /tmp/*
+        printf '\nPIC32 Legacy\n' \
+        && tar xf "$DOWNLOAD_DIR"/'pic32 legacy peripheral libraries linux (2).tar' -C /tmp \
+        && "$(find $DOWNLOAD_DIR -name *Libraries.run)" --mode unattended \
+           --prefix /opt/microchip/
     fi
 
     if [ "$MPLAB_HARMONY" -eq 1 ]
       then
-        printf '\nMPLAB Harmony\n'
-        curl -L "$MPLAB_HARMONY_URL" > /tmp/mplab_harmony \
+        printf '\nMPLAB Harmony\n' \
         && chmod +x /tmp/mplab_harmony \
         && /tmp/mplab_harmony --mode unattended \
-           --prefix /opt/microchip/ \
-        && rm -rf /tmp/*
+           --prefix /opt/microchip/
     fi
 fi
+
+rm --recursive --force /tmp/* "$DOWNLOAD_DIR"
