@@ -30,7 +30,11 @@ Tools -> Options -> Embedded -> Build Tools -> Scan for Build Tools
 [**Missing header files**](doc/header_include_path.png)
 
 ## Building  
+Downloading from MicroChip now requires a user
 
+    MCP_USER='valid_microchip@user.required'
+    MCP_PASS='blaAET13f'
+    
 #### Default build
 
 	docker build --tag andersdra/mplabx .
