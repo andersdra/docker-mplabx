@@ -19,29 +19,41 @@ if [ "$ARDUINO" -eq 1 ]
     && unxz /tmp/arduino_x64.tar.xz \
     && tar xf /tmp/arduino_x64.tar -C /opt/ \
     && rm /tmp/arduino_x64.tar \
-    && /opt/arduino-[0-9.]*/install.sh
+    && arduino_install="$(find /opt/arduino*/install.sh)" \
+    && bash "$arduino_install"
 fi
 
 # AVR GCC
 if [ "$AVRGCC" -eq 1 ]
   then
-    printf '\nAVRGCC\n' \
-    && tar xf "$DOWNLOAD_DIR"/avr8-gnu*.tar.gz -C /opt/
+    printf '\nAVRGCC\n'
+    if ! grep '.microchip.com' <<< "$AVRGCC_URL" > /dev/null
+    then
+      echo 'Downloading AVRGCC'
+      curl --location "$AVRGCC_URL" -o "$DOWNLOAD_DIR/avr8-gnu-custom.tar.gz"
+    fi
+    tar xf "$(find $DOWNLOAD_DIR -name 'avr8-gnu*.tar.gz')" -C /opt/
 fi
 
 # ARM GCC
 if [ "$ARMGCC" -eq 1 ]
   then
-    printf '\nARMGCC\n' \
-    && tar xf "$DOWNLOAD_DIR"/arm-gnu*.tar.gz -C /opt/
+    printf '\nARMGCC\n'
+    if ! grep '.microchip.com' <<< "$ARMGCC_URL" > /dev/null
+    then
+      echo 'Downloading ARMGCC'
+      curl --location "$ARMGCC_URL" -o "$DOWNLOAD_DIR/arm-gnu-custom.tar.gz"
+    fi
+    tar xf "$(find "$DOWNLOAD_DIR" -name 'arm-gnu*.tar.gz')" -C /opt/
 fi
 
 # XC8
 if [ "$MCPXC8" -eq 1 ]
   then
-    printf '\nMCP XC8\n' \
-    && chmod u+x "$DOWNLOAD_DIR"/xc8*.run \
-    && USER=root "$DOWNLOAD_DIR"/xc8*.run \
+    printf '\nMCP XC8\n'
+    xc8_installer="$(find $DOWNLOAD_DIR -name 'xc8*.run')" \
+    && chmod u+x "$xc8_installer" \
+    && USER=root "$xc8_installer" \
        --mode unattended \
        --netservername localhost \
        --LicenseType FreeMode
@@ -50,9 +62,10 @@ fi
 # XC16
 if [ "$MCPXC16" -eq 1 ]
   then
-    printf '\nMCP XC16\n' \
-    && chmod u+x "$DOWNLOAD_DIR"/xc16*.run \
-    && USER=root "$DOWNLOAD_DIR"/xc16*.run \
+    printf '\nMCP XC16\n'
+    xc16_installer="$(find $DOWNLOAD_DIR -name 'xc16*.run')" \
+    && chmod u+x "$xc16_installer" \
+    && USER=root "$xc16_installer" \
        --mode unattended \
        --netservername localhost \
        --LicenseType FreeMode
@@ -77,13 +90,19 @@ fi
 if [ "$MCPXC32" -eq 1 ]
   then
     printf '\nMCP XC32\n'
+    if ! grep '.microchip.com' <<< "$MCPXC32_URL" > /dev/null
+    then
+      echo 'Downloading MCPXC32'
+      curl --location "$MCPXC32_URL" > "$DOWNLOAD_DIR"/xc32-installer.tar
+    fi
     if grep -q ".tar" <<< "$MCPXC32_URL"
       then
-        tar xf /tmp/xc32-installer -C /tmp \
-        && mv /tmp/xc32-*.run /tmp/xc32-installer
+        xc32_installer="$DOWNLOAD_DIR"/xc32-installer.tar
+        tar xf "$xc32_installer" -C "$DOWNLOAD_DIR"
     fi
-    chmod u+x "$DOWNLOAD_DIR"/xc32*.run \
-    && USER=root "$DOWNLOAD_DIR"/xc32*.run \
+    xc32_installer="$(find $DOWNLOAD_DIR -name 'xc32*.run')"
+    chmod u+x "$xc32_installer" \
+    && USER=root "$xc32_installer" \
       --mode unattended \
       --netservername localhost \
       --LicenseType FreeMode
@@ -92,7 +111,7 @@ if [ "$MCPXC32" -eq 1 ]
       then
         printf '\nPIC32 Legacy\n' \
         && tar xf "$DOWNLOAD_DIR"/'pic32 legacy peripheral libraries linux (2).tar' -C /tmp \
-        && "$(find $DOWNLOAD_DIR -name *Libraries.run)" --mode unattended \
+        && "$(find $DOWNLOAD_DIR -name '*Libraries.run')" --mode unattended \
            --prefix /opt/microchip/
     fi
 

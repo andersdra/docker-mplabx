@@ -51,12 +51,14 @@ fi
   && /toolchain_install.bash \
   && /startup_script.bash
 
-if [ ! $C_USER = root ]
+if [ ! "$C_USER" = root ]
   then
-    chmod --recursive 755 $C_HOME \
-      && chown --recursive --from=0:0 $C_USER:$C_USER $C_HOME
+    chmod --recursive 755 "$C_HOME" \
+    && chown --recursive --from=0:0 "$C_USER:$C_USER" "$C_HOME"
 fi
 
+/cleanup.bash
+apt-get purge --yes bc curl procps make xz-utils
 apt-get -qq clean autoclean \
   && rm --recursive --force /usr/share/man/* \
   && rm --recursive --force /tmp/* \
