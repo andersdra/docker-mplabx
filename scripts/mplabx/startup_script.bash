@@ -22,8 +22,7 @@ EOF
   else
     cat > /mplab_start.sh << EOF
 #!/bin/sh
-export JAVA_HOME="$JAVA_HOME"
-export PATH="$JAVA_HOME:$path$PATH"
+export PATH="$path$PATH"
 /bin/bash --login'
 EOF
 fi
