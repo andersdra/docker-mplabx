@@ -20,7 +20,7 @@ OPTIONS ?= --cap-drop=ALL --cap-add=MKNOD --device-cgroup-rule='c 189:* rmw'
 FOLDERS ?= -v $(USB_BUS) -v $(X11_SOCKET) -v $(MPLABX_FOLDER)
 
 
-.PHONY: build shell root-shell run-ide run-ipe run-xforward udev start rm
+.PHONY: build shell root-shell run-ide run-ipe run-xforward udev start rm lint sc
 
 build: Dockerfile
 	docker build --no-cache --rm -t $(IMAGE_NAME):$(VERSION) $(BUILD_ARGS) -f Dockerfile .
@@ -51,5 +51,12 @@ udev:
 	read
 	sudo cp ./z99-custom-microchip.rules /etc/udev/rules.d/
 	sudo udevadm control --reload-rules && sudo udevadm trigger
+
+lint:
+	docker run --rm -i hadolint/hadolint < Dockerfile
+
+sc:
+	shellcheck scripts/tool_dl/*.bash || true
+	shellcheck scripts/mplabx/*.bash || true
 
 default: build
