@@ -14,3 +14,8 @@ ACTION=="add", SUBSYSTEM=="usbmisc", ATTRS{idVendor}=="03eb", ATTRS{idProduct}==
 ACTION=="add", SUBSYSTEM=="tty", ATTRS{idVendor}=="03eb", ATTRS{idProduct}=="2145", MODE:="0666", SYMLINK+="bus/usb/mcp/medbg/tty%n"
 ACTION=="add", SUBSYSTEM=="hidraw", ATTRS{idVendor}=="03eb", ATTRS{idProduct}=="2145", MODE:="0666", SYMLINK+="bus/usb/mcp/medbg/hidraw%n"
 ACTION=="bind", SUBSYSTEM=="usb", ATTRS{idVendor}=="03eb", ATTRS{idProduct}=="2145", MODE:="0666", SYMLINK+="bus/usb/mcp/medbg/usb%n"
+
+# MODEMMANAGER
+# May not stop ModemManager from messing around
+# https://askubuntu.com/questions/399263/udev-rules-seem-ignored-can-not-prevent-modem-manager-from-grabbing-device
+ATTRS{idVendor}=="03EB" ATTRS{idProduct}=="2145", ENV{ID_MM_DEVICE_IGNORE}="1"
