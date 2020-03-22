@@ -51,7 +51,13 @@ fi
 
 if [ "$CUSTOM_VERSION" -gt 0 ]
   then
-    MPLABX_URL="https://ww1.microchip.com/downloads/en/DeviceDoc/MPLABX-v$MPLABX_VERSION-linux-installer.tar"
+    if python -c "exit(0) if $MPLABX_VERSION * 100 % 5 == 0 else exit(1)" # confirm version ending in [.05, .10] etc
+    then
+      MPLABX_URL="https://ww1.microchip.com/downloads/en/DeviceDoc/MPLABX-v$MPLABX_VERSION-linux-installer.tar"
+    else
+      echo "Incorrect MPLABX version: $MPLABX_VERSION"
+      exit 1
+    fi
 fi
 
 printf '\nMPLAB X\n'
@@ -67,5 +73,15 @@ if [ "$MPLABX_DARCULA" -eq 1 ]
     echo "Downloading Darcula Theme"
     curl "$DARCULA_URL" > "$C_HOME/darcula_theme.nbm"
 fi
+
+cd "$C_HOME" \
+&& mkdir MPLABXProjects \
+      .cache \
+      .java \
+      .mchp_packs \
+      .mplabcomm \
+      .mplab_ide \
+      .oracle_jre_usage
+
 
 rm --recursive --force /tmp/*

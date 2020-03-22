@@ -3,11 +3,12 @@
 # needs a valid microchip user
 import os
 import sys
-import wget
 import pickle
 import multiprocessing as mp
 from time import sleep
 from selenium import webdriver
+
+toolchains = ['AVRGCC', 'ARMGCC', 'MCPXC8', 'MCPXC16', 'MCPXC32', 'MPLAB_HARMONY', 'PIC32_LEGACY', 'OTHERMCU']
 
 profile = webdriver.FirefoxProfile()
 # remove download dialog, set download directory etc
@@ -63,22 +64,23 @@ def check_downloads():
             sleep(1)
             check_downloads()
 
-
 try:
     mcp_login(os.environ['MCP_USER'], os.environ['MCP_PASS'])
-except TypeError:
-    print('No Microchip user/pass input')
+except:
+    print('myMicrochip login error')
+    sys.exit(1)
 
-toolchains = ['AVRGCC', 'ARMGCC', 'MCPXC8', 'MCPXC16', 'MCPXC32', 'MPLAB_HARMONY', 'PIC32_LEGACY', 'OTHERMCU']
 for tool in toolchains:
     if tool in os.environ:
-        url = os.environ[tool + '_URL']
-        if '.microchip.com' in url:
-            print('Started download of {}'.format(tool))
-            mcp_get(os.environ[tool + '_URL'])
-            sleep(5)
-        else:
-            print('User defined URL of {}, will be downloaded later'.format(tool))
+        if os.environ[tool] == '1':
+            url = os.environ[tool + '_URL']
+            if '.microchip.com' in url:
+                print('Starting download of {}'.format(tool))
+                mcp_get(os.environ[tool + '_URL'])
+                sleep(5)
+            else:
+                print('User defined URL of {} will be downloaded later'.format(tool))
 
 check_downloads()
 sys.exit(0)
+

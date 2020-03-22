@@ -3,6 +3,7 @@
 # download and install toolchains
 
 # ARDUINO
+# TODO: this has never worked, problem with plugin/procedure
 if [ "$ARDUINO" -eq 1 ]
   then
     printf '\nARDUINO\n'

@@ -2,17 +2,11 @@
 
 mkdir -p /usr/share/man/man1 # long forgotten, but fixes some error
 
-dpkg --add-architecture i386
 apt-get update
 apt-get -qq install --yes --no-install-recommends \
     bc \
     ca-certificates \
     curl \
-    libc6:i386 \
-    libx11-6:i386 \
-    libxext6:i386 \
-    libstdc++6:i386 \
-    libexpat1:i386 \
     libgail18 \
     libgtk2.0-0 \
     libgtk2.0-bin \
@@ -33,23 +27,37 @@ apt-get -qq install --yes --no-install-recommends \
     xz-utils \
     x11-utils "$ADDITIONAL_PACKAGES"
 
-wait
 
-V535MINUS=0
-if [ "$MPLABX_VERSION" -gt 0 ]
-  then
-    V535MINUS=$(bc -l <<< "$MPLABX_VERSION < 5.35")
+V535MINUS=$(bc -l <<< "$MPLABX_VERSION <= 5.35")
+
+# mplabx >= v5.40 will be 64bit
+if [ "$V535MINUS" -eq 1 ]
+then
+  dpkg --add-architecture i386
+  apt-get update
+  apt-get -qq install --yes --no-install-recommends \
+    libc6:i386 \
+    libx11-6:i386 \
+    libxext6:i386 \
+    libstdc++6:i386 \
+    libexpat1:i386
 fi
 
-if [ "$V535MINUS" -eq 1 ]
+V530MINUS=0
+if [ "$MPLABX_VERSION" -gt 0 ]
   then
-    apt-get install --yes  --no-install-recommends default-jre
+    V530MINUS=$(bc -l <<< "$MPLABX_VERSION <= 5.30")
+    if [ "$V530MINUS" -eq 1 ]
+    then
+      # is this even needed after adding JAVA_HOME?
+      apt-get install --yes --no-install-recommends default-jre
+    fi
 fi
 
 /create_user.bash \
-  && /mplabx_install.bash \
-  && /toolchain_install.bash \
-  && /startup_script.bash
+&& /mplabx_install.bash \
+&& /toolchain_install.bash \
+&& /startup_script.bash
 
 if [ ! "$C_USER" = root ]
   then
@@ -60,8 +68,8 @@ fi
 /cleanup.bash
 apt-get purge --yes bc curl procps make xz-utils
 apt-get -qq clean autoclean \
-  && rm --recursive --force /usr/share/man/* \
-  && rm --recursive --force /tmp/* \
-  && rm --recursive --force /var/log/* \
-  && bash -c 'rm --recursive --force /var/lib/{apt,dpkg,cache,log}/*' \
-  && find / -maxdepth 1 -name "*.bash" -delete
+&& rm --recursive --force /usr/share/man/* \
+&& rm --recursive --force /tmp/* \
+&& rm --recursive --force /var/log/* \
+&& rm --recursive --force /var/lib/{apt,dpkg,cache,log}/* \
+&& find / -maxdepth 1 -name "*.bash" -delete

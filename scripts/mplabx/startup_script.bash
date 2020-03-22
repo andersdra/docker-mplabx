@@ -16,10 +16,15 @@ if [ "$MPLABX_IDE_START" -eq 1 ]
     cat > /mplab_start.sh << EOF
 #!/bin/sh
 export JAVA_HOME="$JAVA_HOME"
-export PATH="$path$PATH"
-mplab_ide
+export PATH="$JAVA_HOMEbin:$path$PATH"
+/usr/bin/mplab_ide
 EOF
   else
-    printf '#!/bin/bash\nbash --login' > /mplab_start.sh
+    cat > /mplab_start.sh << EOF
+#!/bin/sh
+export JAVA_HOME="$JAVA_HOME"
+export PATH="$JAVA_HOME:$path$PATH"
+/bin/bash --login'
+EOF
 fi
 chmod 775 /mplab_start.sh
