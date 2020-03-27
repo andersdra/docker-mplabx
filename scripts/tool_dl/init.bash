@@ -1,5 +1,7 @@
 #!/bin/bash
 
+mkdir /toolchains # IDE only build fails at copy stage without this..
+
 cat > /mplabx.env << EOF
 AVRGCC=$AVRGCC
 ARMGCC=$ARMGCC
@@ -33,11 +35,10 @@ then
   && echo 'Downloading geckodriver' \
   && wget --quiet "https://github.com$latest_release" \
   && tar xf geckodriver*.tar.gz \
-  && mv geckodriver /bin \
-  && mkdir /toolchains
-    /kill_firefox.bash &
-    echo 'Starting download of toolchain(s)'
-    xvfb-run /toolchains.py
+  && mv geckodriver /bin
+  /kill_firefox.bash &
+  echo 'Starting download of toolchain(s)'
+  xvfb-run /toolchains.py
 else
   echo 'No user/password input for myMicrochip downloads'
   exit 0 # self provided url's or ide/ipe only
