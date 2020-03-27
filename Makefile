@@ -72,7 +72,7 @@ pylint:
 
 todo:
 	egrep -I -n -R --exclude='.gitignore' --exclude="*.bak" --exclude-dir='var' \
-	--exclude-dir='config' --exclude=Makefile 'TODO|todo' || true
+	--exclude-dir='config' --exclude-dir='.git' --exclude=Makefile 'TODO|todo' || true
 
 stats:
 	cloc --exclude-list-file=.cloc_exclude .
