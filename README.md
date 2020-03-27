@@ -47,7 +47,7 @@ Downloading from MicroChip now requires a user
 	C_GUID=1000
     C_HOME="/home/${C_USER}"
 
-    MPLABX_IDE_START=1 // for toolchain only container
+    MPLABX_IDE_ENTRY=1 // for toolchain only container
 	MPLABX_IDE=1
     MPLABX_IPE=0
     MPLABX_TELEMETRY=0
