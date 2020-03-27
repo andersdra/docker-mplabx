@@ -1,7 +1,5 @@
 # MPLAB X IDE/IPE docker container 
 
-# a new downloader is under testing
-
 AVR GCC, ARM GCC  
 Microchip XC8, XC16, XC32
 
@@ -24,13 +22,12 @@ To avoid permission problems run `./folder_structure.sh` to generate local runti
 Keep a backup when updating the image, you will be asked what you want to import including plugins.  
 **To use USB from inside the container** it is necessary that udev rules from `z99-custom-microchip.rules` are active.
 
-#### Adding toolchains:  
-Tools -> Options -> Embedded -> Build Tools -> Scan for Build Tools  
-
-[**Missing header files**](doc/header_include_path.png)
 
 ## Building  
-Downloading from MicroChip now requires a user
+
+Edit Makefile or use --build-args
+
+Downloading from Microchip now requires a user
 
     MCP_USER='valid_microchip@user.required'
     MCP_PASS='blaAET13f'
@@ -39,6 +36,7 @@ Downloading from MicroChip now requires a user
 
 	docker build --tag andersdra/mplabx .
 	docker-compose build
+	make build
 
 #### Default build args
 
@@ -93,25 +91,13 @@ Example for building v5.15:
 	
 ### Running
 
-	docker run \
-	--name mplab_ide \
-	--cap-drop=all \
-	--cap-add=MKNOD \
-	--device-cgroup-rule='c 189:* rmw' \
-	-e DISPLAY \
-	-e TZ="$(timedatectl show | grep Timezone | cut -d '=' -f2)" \
-	-v /dev/bus/usb:/dev/bus/usb \
-	-v /tmp/.X11-unix:/tmp/.X11-unix:ro \
-	-v $PWD/MPLABX_Folders/MPLABXProjects:/mplabx/MPLABXProjects \
-	-v $PWD/MPLABX_Folders/cache:/mplabx/.cache \
-	-v $PWD/MPLABX_Folders/java:/mplabx/.java \
-	-v $PWD/MPLABX_Folders/mchp_packs:/mplabx/.mchp_packs \
-	-v $PWD/MPLABX_Folders/mplab_ide:/mplabx/.mplab_ide \
-	-v $PWD/MPLABX_Folders/mplabcomm:/mplabx/.mplabcomm \
-	-v $PWD/MPLABX_Folders/oracle_jre_usage:/mplabx/.oracle_jre_usage \
-	andersdra/mplabx
+Makefile is set up to mount 'mplabx' as userdir for mplabx and 'MPLABXProjects' as the project folder.
+
+	make run-ide
 	
 # Info/Troubleshooting
+
+[**Missing header files**](doc/header_include_path.png)
 
 `No protocol specified` or nothing happens when trying to start `mplab_ide`/`mplab_ipe`: Run `xhost +local:$USER` to allow access to X server.
 
