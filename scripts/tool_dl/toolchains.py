@@ -47,22 +47,27 @@ def mcp_login(mc_user, mc_pass):
     password.send_keys(mc_pass)
     login = driver.find_element_by_id('_ctl0__ctl0_MainContent_PageContent_Login1_LinkButton1')
     login.click()
-    save_cookie(driver, '/selenium_cookies')
+    save_cookie(driver, '/tmp/selenium_cookies')
 
 
 def mcp_get(dl_url):
     dl = webdriver.Firefox(firefox_profile=profile, service_log_path=os.path.devnull)
     dl.get('https://www.microchip.com/mymicrochip/')
-    load_cookie(dl, '/selenium_cookies')
+    load_cookie(dl, '/tmp/selenium_cookies')
     a = mp.Process(target=dl.get, args=(dl_url,))
     a.start()
 
 
 def check_downloads():
+    downloads = 0
     for filename in os.listdir(os.environ['DOWNLOAD_DIR']):
         if '.part' in filename:
+            print("{} size; {}".format(filename, os.path.getsize(os.environ['DOWNLOAD_DIR'] + "/{}".format(filename))))
+            downloads += 1
             sleep(1)
-            check_downloads()
+    if downloads:
+        sleep(2)
+        check_downloads()
 
 try:
     mcp_login(os.environ['MCP_USER'], os.environ['MCP_PASS'])
@@ -77,9 +82,9 @@ for tool in toolchains:
             if '.microchip.com' in url:
                 print('Starting download of {}'.format(tool))
                 mcp_get(os.environ[tool + '_URL'])
-                sleep(5)
+                sleep(2)
             else:
-                print('User defined URL of {} will be downloaded later'.format(tool))
+                print('User defined {} URL {}'.format(tool, url))
 
 check_downloads()
 sys.exit(0)
