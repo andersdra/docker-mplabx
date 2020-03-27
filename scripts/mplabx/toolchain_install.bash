@@ -33,7 +33,7 @@ if [ "$AVRGCC" -eq 1 ]
       echo 'Downloading AVRGCC'
       curl --location "$AVRGCC_URL" -o "$DOWNLOAD_DIR/avr8-gnu-custom.tar.gz"
     fi
-    tar xf "$(find $DOWNLOAD_DIR -name 'avr8-gnu*.tar.gz')" -C /opt/
+    tar xf "$(find "$DOWNLOAD_DIR" -name 'avr8-gnu*.tar.gz')" -C /opt/
 fi
 
 # ARM GCC
@@ -52,7 +52,7 @@ fi
 if [ "$MCPXC8" -eq 1 ]
   then
     printf '\nMCP XC8\n'
-    xc8_installer="$(find $DOWNLOAD_DIR -name 'xc8*.run')" \
+    xc8_installer="$(find "$DOWNLOAD_DIR" -name 'xc8*.run')" \
     && chmod u+x "$xc8_installer" \
     && USER=root "$xc8_installer" \
        --mode unattended \
@@ -64,7 +64,7 @@ fi
 if [ "$MCPXC16" -eq 1 ]
   then
     printf '\nMCP XC16\n'
-    xc16_installer="$(find $DOWNLOAD_DIR -name 'xc16*.run')" \
+    xc16_installer="$(find "$DOWNLOAD_DIR" -name 'xc16*.run')" \
     && chmod u+x "$xc16_installer" \
     && USER=root "$xc16_installer" \
        --mode unattended \
@@ -101,7 +101,7 @@ if [ "$MCPXC32" -eq 1 ]
         xc32_installer="$DOWNLOAD_DIR"/xc32-installer.tar
         tar xf "$xc32_installer" -C "$DOWNLOAD_DIR"
     fi
-    xc32_installer="$(find $DOWNLOAD_DIR -name 'xc32*.run')"
+    xc32_installer="$(find "$DOWNLOAD_DIR" -name 'xc32*.run')"
     chmod u+x "$xc32_installer" \
     && USER=root "$xc32_installer" \
       --mode unattended \
@@ -112,7 +112,7 @@ if [ "$MCPXC32" -eq 1 ]
       then
         printf '\nPIC32 Legacy\n' \
         && tar xf "$DOWNLOAD_DIR"/'pic32 legacy peripheral libraries linux (2).tar' -C /tmp \
-        && "$(find $DOWNLOAD_DIR -name '*Libraries.run')" --mode unattended \
+        && "$(find "$DOWNLOAD_DIR" -name '*Libraries.run')" --mode unattended \
            --prefix /opt/microchip/
     fi
 
