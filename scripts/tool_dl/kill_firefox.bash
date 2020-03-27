@@ -3,16 +3,20 @@
 # causes exception:
 # selenium.common.exceptions.WebDriverException: Message: Failed to decode response from marionette
 
+part_file_exists() {
+  find /toolchains -name "*.part" | read -r
+}
+
 # wait for downloads to start
-while ! find /toolchains -name "*.part" | read -r;do
-    if find /toolchains -name "*.part" | read -r;then
+while ! part_file_exists;do
+    if part_file_exists;then
         break
     fi
     sleep 5
 done
 
 while :;do
-  if ! find /toolchains -name "*.part" | read -r;then
+  if ! part_file_exists;then
     echo "Finished download(s)"
     pgrep firefox-esr | xargs kill
     exit 0
