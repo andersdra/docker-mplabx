@@ -1,5 +1,7 @@
 # MPLAB X IDE/IPE docker container 
 
+![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/andersdra/mplabx?style=plastic)
+
 AVR GCC, ARM GCC  
 Microchip XC8, XC16, XC32
 
