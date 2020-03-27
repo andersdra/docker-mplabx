@@ -2,17 +2,32 @@
 # if ENV is not supplied from docker hub, set to default
 # guessing this is not the way to go, but (maybe) good enough for now
 
+AVRGCC_URL=$AVRGCC_URL
+ARMGCC_URL=$ARMGCC_URL
+MCPXC8_URL=$MCPXC8_URL
+MCPXC16_URL=$MCPXC16_URL
+MCPXC32_URL=$MCPXC32_URL
+MPLAB_HARMONY_URL=$MPLAB_HARMONY_URL
+PIC32_LEGACY_URL=$PIC32_LEGACY_URL
+DOWNLOAD_DIR=$DOWNLOAD_DIR
+
 if [ -z "$MPLABX_VERSION" ] ; then MPLABX_VERSION=5.35 ; fi
 if [ -z "$MPLABX_IDE" ] ; then MPLABX_IDE=1 ;fi
+if [ -z "$MPLABX_IDE_ENTRY" ] ; then MPLABX_IDE_ENTRY=1 ;fi
 if [ -z "$MPLABX_IPE" ] ; then MPLABX_IPE=0 ;fi
-if [ -z "$AVRGCC" ] ; then AVRGCC=0 ; fi
-if [ -z "$ARMGCC" ] ; then ARMGCC=0 ; fi
-if [ -z "$MCPXC8" ] ; then MCPXC8=0 ; fi
-if [ -z "$MCPXC16" ] ; then MCPXC16=0 ; fi
-if [ -z "$MCPXC32" ] ; then MCPXC32=0 ; fi
-if [ -z "$PIC32_LEGACY" ] ; then PIC32_LEGACY=0 ; fi
-if [ -z "$MPLAB_HARMONY" ] ; then MPLAB_HARMONY=0 ; fi
-if [ -z "$OTHERMCU"  ] ; then OTHERMCU=0 ; fi
+if [ -z "$MPLABX_TELEMETRY" ] ; then MPLABX_TELEMETRY=0 ;fi
+if [ -z "$MPLABX_DARCULA" ] ; then MPLABX_DARCULA=1 ;fi
+if [ -z "$ARDUINO" ] ; then ARDUINO=0 ;fi
+if [ -z "$AVRGCC" ] ; then AVRGCC=0 ;fi
+if [ -z "$ARMGCC" ] ; then ARMGCC=0 ;fi
+if [ -z "$MCPXC8" ] ; then MCPXC8=0 ;fi
+if [ -z "$MCPXC16" ] ; then MCPXC16=0 ;fi
+if [ -z "$MCPXC32" ] ; then MCPXC32=0 ;fi
+if [ -z "$PIC32_LEGACY" ] ; then PIC32_LEGACY=0 ;fi
+if [ -z "$MPLAB_HARMONY" ] ; then MPLAB_HARMONY=0 ;fi
+if [ -z "$OTHERMCU" ] ; then OTHERMCU=0 ;fi
+if [ -z "$DOWNLOAD_DIR" ] ; then DOWNLOAD_DIR='/toolchains' ;fi
+if [ -z "$DIRTY_CLEANUP" ] ; then DIRTY_CLEANUP=0 ;fi
 
 docker build \
 --build-arg MPLABX_VERSION="$MPLABX_VERSION" \

@@ -28,6 +28,7 @@ apt-get -qq install --yes --no-install-recommends \
     libxxf86dga1 \
     make \
     procps \
+    python3 \
     xz-utils \
     x11-utils
 
@@ -55,7 +56,7 @@ if [ "$V535MINUS" -eq 1 ];then
 fi
 
 V530MINUS=0
-if [ "$MPLABX_VERSION" -gt 0 ];then
+if python3 -c "exit(0) if $MPLABX_VERSION > 0 else exit(1)";then
     V530MINUS=$(bc -l <<< "$MPLABX_VERSION <= 5.30")
     if [ "$V530MINUS" -eq 1 ];then
       # is this even needed after adding JAVA_HOME?
@@ -74,7 +75,7 @@ if [ ! "$C_USER" = root ];then
 fi
 
 /cleanup.bash
-apt-get purge --yes bc curl procps make xz-utils
+apt-get purge --yes bc curl procps python3 make xz-utils
 apt-get -qq clean autoclean \
 && rm --recursive --force /usr/share/man/* \
 && rm --recursive --force /tmp/* \
