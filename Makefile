@@ -71,8 +71,8 @@ pylint:
 	pylint scripts/tool_dl/*.py || true
 
 todo:
-	grep -n -R --exclude='.gitignore' --exclude=Makefile TODO || true
-	grep -n -R --exclude='.gitignore' --exclude=Makefile todo || true
+	egrep -I -n -R --exclude='.gitignore' --exclude="*.bak" --exclude-dir='var' \
+	--exclude-dir='config' --exclude=Makefile 'TODO|todo' || true
 
 stats:
 	cloc --exclude-list-file=.cloc_exclude .
