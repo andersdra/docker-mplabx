@@ -75,6 +75,6 @@ todo:
 	grep -n -R --exclude='.gitignore' --exclude=Makefile todo || true
 
 stats:
-	cloc --exclude-dir=mplabx,MPLABXProjects .
+	cloc --exclude-list-file=.cloc_exclude .
 
 default: build
