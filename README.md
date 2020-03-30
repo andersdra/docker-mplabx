@@ -1,7 +1,7 @@
 # MPLAB X IDE/IPE docker container 
 
 ![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/andersdra/mplabx?style=plastic)
-![Docker Cloud Automated build](https://img.shields.io/docker/cloud/automated/andersdra/mplabx)
+![Docker Cloud Automated build](https://img.shields.io/docker/cloud/automated/andersdra/mplabx?style=plastic)
 
 AVR GCC, ARM GCC  
 Microchip XC8, XC16, XC32
@@ -21,16 +21,16 @@ All container capabilities are dropped except `mknod` which is needed for replug
 
 Mounts the hosts X11 socket read-only so beware, never use untrusted prebuilt images that does this.  
 
-To avoid permission problems run `./folder_structure.sh` to generate local runtime/settings folders plus a project folder.  
+MPLAB X userdir defaults to 'mplabx', project folder 'MPLABXProjects'  
 Keep a backup when updating the image, you will be asked what you want to import including plugins.  
 **To use USB from inside the container** it is necessary that udev rules from `z99-custom-microchip.rules` are active.
 
 
 ## Building  
 
-Edit Makefile or use --build-args
+Edit Makefile or use --build-args.  
 
-Downloading from Microchip now requires a user
+**Downloading {AVR,ARM}GCC from Microchip now requires a user**  
 
     MCP_USER='valid_microchip@user.required'
     MCP_PASS='blaAET13f'
@@ -94,8 +94,6 @@ Example for building v5.15:
 	
 ### Running
 
-Makefile is set up to mount 'mplabx' as userdir for mplabx and 'MPLABXProjects' as the project folder.
-
 	make run-ide
 	
 # Info/Troubleshooting
@@ -104,14 +102,12 @@ Makefile is set up to mount 'mplabx' as userdir for mplabx and 'MPLABXProjects' 
 
 `No protocol specified` or nothing happens when trying to start `mplab_ide`/`mplab_ipe`: Run `xhost +local:$USER` to allow access to X server.
 
-Use `ide/ipe_usb.sh` to create default containers that allow re-plugging of devices connected when IDE/IPE is started.
-
 Re-run created containers by their name from any folder  
 `docker start mplab_ide` || `docker start mplab_ipe`
 
-`ide_xforward.sh` creates a container that can be X-forwarded, ideal for remote debugging etc.
-
 Delete cache folder content if anything stops working as expected in IDE.
+
+For sound events in IDE use ADDITIONAL_PACKAGES to install `libcanberra-gtk-module`  
 
 [**List of TZ database time zones**](https://en.wikipedia.org/wiki/List_of_tz_database_time_zones) 
 
@@ -128,8 +124,9 @@ AVR and MPLAB are registered trademarks of Microchip in the U.S.A. and other cou
 # Known Issues/Limitations
 
 - ~~Current udev rules will allow only 1 PICKit4, 1 Atmel ICE, 1 mEDBG at the same time.~~  
-- ModemManager can mess with ttyACMx devices under re-enumeration: `root@host:# systemctl stop ModemManager.service`  
-- Moving a floating window to another workspace under GNOME crashes IDE.
+- ModemManager can mess with ttyACMx devices under re-enumeration:  
+`root@host:# systemctl stop ModemManager.service`  
+- ~~Moving a floating window to another workspace under GNOME crashes IDE.~~
 
 # License
 
