@@ -16,6 +16,7 @@ XFORWARD_CONTAINER_NAME ?= mplab_xforward
 ENVIRONMENT ?= -e DISPLAY -e TZ=$(shell timedatectl -p Timezone show | cut -d = -f2)
 OPTIONS ?= --cap-drop=ALL --cap-add=MKNOD
 MOUNTS ?= $(USB_BUS) $(X11_SOCKET) $(MPLABX_FOLDER) $(PROJECT_FOLDER)
+BUILD_ARGS ?= 
 
 .PHONY: build shell root-shell run-ide run-ipe run-xforward udev start rm hadolint 
 .PHONY: sc usb pylint todo args-toolchain args
@@ -26,8 +27,8 @@ run:
 build: Dockerfile
 	docker build --no-cache --rm -t $(IMAGE_NAME):$(VERSION) $(BUILD_ARGS) .
 
-argfile: build-args.env
-argfile: BUILD_ARGS = $(shell for arg in $$(< build.args);do args+="--build-arg $$arg ";done; echo $$arg)
+argfile: build.args
+argfile: BUILD_ARGS = $(shell IFS=$$'\n';for arg in $$(< build.args);do args+="--build-arg $$arg ";done; echo $$args)
 argfile: build
 
 run-usb: CONTAINER_NAME = mplab_usb
