@@ -9,16 +9,17 @@ XAUTH = -v $(HOME)/.Xauthority:/home/mplabx/.Xauthority:ro
 
 IMAGE_NAME ?= mpavrgcc
 CONTAINER_NAME ?= mplab_ide
-CONAINER_CMD ?= /entrypoint.sh
 USB_CONTAINER_NAME ?= mplab_usb
-
+IPE_CONTAINER_NAME ?= mplab_ipe
 XFORWARD_CONTAINER_NAME ?= mplab_xforward
+CONTAINER_CMD ?= /entrypoint.sh
+
 ENVIRONMENT ?= -e DISPLAY -e TZ=$(shell timedatectl -p Timezone show | cut -d = -f2)
 OPTIONS ?= --cap-drop=ALL --cap-add=MKNOD
-MOUNTS ?= $(USB_BUS) $(X11_SOCKET) $(MPLABX_FOLDER) $(PROJECT_FOLDER)
-BUILD_ARGS ?= 
+MOUNTS ?= $(X11_SOCKET) $(MPLABX_FOLDER) $(PROJECT_FOLDER)
+BUILD_ARGS ?=
 
-.PHONY: build shell root-shell run-ide run-ipe run-xforward udev start rm hadolint 
+.PHONY: build shell root-shell run-ide run-ipe run-xforward udev start rm hadolint
 .PHONY: sc usb pylint todo args-toolchain args
 
 run:
@@ -31,17 +32,21 @@ argfile: build.args
 argfile: BUILD_ARGS = $(shell IFS=$$'\n';for arg in $$(< build.args);do args+="--build-arg $$arg ";done; echo $$args)
 argfile: build
 
-run-usb: CONTAINER_NAME = mplab_usb
+run-usb: CONTAINER_NAME = $(USB_CONTAINER_NAME)
 run-usb: OPTIONS += --device-cgroup-rule='c 189:* rmw'
 run-usb: MOUNTS += $(USB_BUS)
 run-usb: run
 
-run-ipe: CONTAINER_NAME = mplab_ipe
+run-ipe: CONTAINER_NAME = $(IPE_CONTAINER_NAME)
 run-ipe: CONTAINER_CMD = mplab_ipe
+run-ipe: OPTIONS += --device-cgroup-rule='c 189:* rmw'
+run-ipe: MOUNTS += $(USB_BUS)
 run-ipe: run
 
 run-xforward: CONTAINER_NAME = $(XFORWARD_CONTAINER_NAME)
 run-xforward: OPTIONS += --net=host
+run-xforward: OPTIONS += --device-cgroup-rule='c 189:* rmw'
+run-xforward: MOUNTS += $(USB_BUS)
 run-xforward: MOUNTS += $(XAUTH)
 run-xforward: run
 

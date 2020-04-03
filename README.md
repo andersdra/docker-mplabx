@@ -128,6 +128,14 @@ AVR and MPLAB are registered trademarks of Microchip in the U.S.A. and other cou
 `root@host:# systemctl stop ModemManager.service`  
 - ~~Moving a floating window to another workspace under GNOME crashes IDE.~~
 
+# Todo
+
+- Avoid mounting whole USB bus
+- xpra for X11 isolation
+- Wayland support
+- Test on Windows
+
+
 # License
 
 This software is licensed under the MIT License.  
