@@ -1,58 +1,54 @@
-SHELL := /bin/bash
+SHELL = /bin/bash
 VERSION ?= latest
 
-MCP_USER ?= 
-MCP_PASS ?= 
-BUILD_ARGS ?= --build-arg MCP_USER=$(MCP_USER) --build-arg MCP_PASS=$(MCP_PASS)
-BUILD_ARGS += --build-arg DIRTY_CLEANUP=1 --build-arg AVRGCC=1
-
-USB_BUS = /dev/bus/usb:/dev/bus/usb
-X11_SOCKET = /tmp/.X11-unix:/tmp/.X11-unix:ro
-MPLABX_FOLDER = $(PWD)/mplabx:/home/mplabx/mplabx
-PROJECT_FOLDER = $(PWD)/MPLABXProjects:/home/mplabx/MPLABXProjects
-XAUTH = $(HOME)/.Xauthority:/home/mplabx/.Xauthority:ro
+USB_BUS = -v /dev/bus/usb:/dev/bus/usb
+X11_SOCKET = -v /tmp/.X11-unix:/tmp/.X11-unix:ro
+MPLABX_FOLDER = -v $(PWD)/mplabx:/home/mplabx/mplabx
+PROJECT_FOLDER = -v $(PWD)/MPLABXProjects:/home/mplabx/MPLABXProjects
+XAUTH = -v $(HOME)/.Xauthority:/home/mplabx/.Xauthority:ro
 
 IMAGE_NAME ?= mpavrgcc
-IDE_CONTAINER_NAME ?= mplab_ide
-IPE_CONTAINER_NAME ?= mplab_ipe
+CONTAINER_NAME ?= mplab_ide
+CONAINER_CMD ?= /entrypoint.sh
 USB_CONTAINER_NAME ?= mplab_usb
 
 XFORWARD_CONTAINER_NAME ?= mplab_xforward
 ENVIRONMENT ?= -e DISPLAY -e TZ=$(shell timedatectl -p Timezone show | cut -d = -f2)
-OPTIONS ?= --cap-drop=ALL --cap-add=MKNOD --device-cgroup-rule='c 189:* rmw'
-FOLDERS ?= -v $(USB_BUS) -v $(X11_SOCKET) -v $(MPLABX_FOLDER) -v $(PROJECT_FOLDER)
+OPTIONS ?= --cap-drop=ALL --cap-add=MKNOD
+MOUNTS ?= $(USB_BUS) $(X11_SOCKET) $(MPLABX_FOLDER) $(PROJECT_FOLDER)
 
-.PHONY: build shell root-shell run-ide run-ipe run-xforward udev start rm hadolint sc usb pylint todo
+.PHONY: build shell root-shell run-ide run-ipe run-xforward udev start rm hadolint 
+.PHONY: sc usb pylint todo args-toolchain args
+
+run:
+	docker run --name $(CONTAINER_NAME) $(OPTIONS) $(ENVIRONMENT) $(MOUNTS) $(IMAGE_NAME) $(CONTAINER_CMD)
 
 build: Dockerfile
-	docker build --no-cache --rm -t $(IMAGE_NAME):$(VERSION) $(BUILD_ARGS) -f Dockerfile .
+	docker build --no-cache --rm -t $(IMAGE_NAME):$(VERSION) $(BUILD_ARGS) .
 
-argfile: BUILD_ARGS += $(shell for arg in $$(< build-args.env);do args+="--build-arg $$arg ";done; echo $$args)
+argfile: build-args.env
+argfile: BUILD_ARGS = $(shell for arg in $$(< build.args);do args+="--build-arg $$arg ";done; echo $$arg)
 argfile: build
 
-shell:
-	docker run -it --rm $(IMAGE_NAME) /bin/bash
+run-usb: CONTAINER_NAME = mplab_usb
+run-usb: OPTIONS += --device-cgroup-rule='c 189:* rmw'
+run-usb: MOUNTS += $(USB_BUS)
+run-usb: run
 
-root-shell:
-	docker run --user root -it --rm $(IMAGE_NAME) /bin/bash
+run-ipe: CONTAINER_NAME = mplab_ipe
+run-ipe: CONTAINER_CMD = mplab_ipe
+run-ipe: run
 
-run-ide:
-	docker run --name $(IDE_CONTAINER_NAME) $(OPTIONS) $(ENVIRONMENT) $(FOLDERS) mpavrgcc
-
-usb:
-	docker run --name $(USB_CONTAINER_NAME) $(OPTIONS) $(ENVIRONMENT)  -v /tmp/.X11-unix:/tmp/.X11-unix:ro -v /dev/bus/usb/mcp:/dev/bus/usb -v $(MPLABX_FOLDER)  mpavrgcc
-
-run-ipe:
-	docker run --name $(IPE_CONTAINER_NAME) $(OPTIONS) $(ENVIRONMENT) $(FOLDERS) mpavrgcc mplab_ide
-
-run-xforward:
-	docker run --name $(XFORWARD_CONTAINER_NAME) $(OPTIONS) --net=host $(ENVIRONMENT) $(FOLDERS) -v $(XAUTH) mpavrgcc
+run-xforward: CONTAINER_NAME = $(XFORWARD_CONTAINER_NAME)
+run-xforward: OPTIONS += --net=host
+run-xforward: MOUNTS += $(XAUTH)
+run-xforward: run
 
 start:
-	docker start mplab_ide
+	docker start $(CONTAINER_NAME)
 
 rm:
-	docker rm -f mplab_ide
+	docker rm -f $(CONTAINER_NAME)
 
 udev:
 	echo 'Will add ./z99-custom-microchip.rules to /etc/udev/rules.d, press enter to continue'
@@ -78,5 +74,17 @@ todo:
 
 stats:
 	cloc --exclude-list-file=.cloc_exclude .
+
+grep-args-toolchain:
+	grep ARG Dockerfile | sed -n '/AVRGCC/,/DOWNLOAD_DIR/p' | cut -d ' ' -f2 | cut -d = -f1
+
+grep-args:
+	grep ARG Dockerfile | cut -d ' ' -f2
+
+shell:
+	docker run -it --rm $(IMAGE_NAME) /bin/bash
+
+root-shell:
+	docker run --user root -it --rm $(IMAGE_NAME) /bin/bash
 
 default: build
