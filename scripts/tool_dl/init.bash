@@ -2,24 +2,14 @@
 
 mkdir /toolchains # IDE only build fails at copy stage without this..
 
-cat > /mplabx.env << EOF
-AVRGCC=$AVRGCC
-ARMGCC=$ARMGCC
-MCPXC8=$MCPXC8
-MCPXC16=$MCPXC16
-MCPXC32=$MCPXC32
-PIC32_LEGACY=$PIC32_LEGACY
-MPLAB_HARMONY=$MPLAB_HARMONY
-OTHERMCU=$OTHERMCU
-AVRGCC_URL=$AVRGCC_URL
-ARMGCC_URL=$ARMGCC_URL
-MCPXC8_URL=$MCPXC8_URL
-MCPXC16_URL=$MCPXC16_URL
-MCPXC32_URL=$MCPXC32_URL
-MPLAB_HARMONY_URL=$MPLAB_HARMONY_URL
-PIC32_LEGACY_URL=$PIC32_LEGACY_URL
-DOWNLOAD_DIR=$DOWNLOAD_DIR
-EOF
+# save build-args for second stage
+(
+  IFS=$'\n'
+  for env in $(< build-args.env)
+  do
+    echo "$env=$(printenv $env)" >> mplabx.env
+  done
+)
 
 if [ "$MCP_USER" ] && [ "$MCP_PASS" ]
 then
