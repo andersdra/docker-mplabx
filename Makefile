@@ -1,7 +1,7 @@
 SHELL := /bin/bash
 VERSION ?= latest
 
-MCP_USER ?= valid@user.needed
+MCP_USER ?= 
 MCP_PASS ?= 
 BUILD_ARGS ?= --build-arg MCP_USER=$(MCP_USER) --build-arg MCP_PASS=$(MCP_PASS)
 BUILD_ARGS += --build-arg DIRTY_CLEANUP=1 --build-arg AVRGCC=1
@@ -22,11 +22,13 @@ ENVIRONMENT ?= -e DISPLAY -e TZ=$(shell timedatectl -p Timezone show | cut -d = 
 OPTIONS ?= --cap-drop=ALL --cap-add=MKNOD --device-cgroup-rule='c 189:* rmw'
 FOLDERS ?= -v $(USB_BUS) -v $(X11_SOCKET) -v $(MPLABX_FOLDER) -v $(PROJECT_FOLDER)
 
-
-.PHONY: build shell root-shell run-ide run-ipe run-xforward udev start rm hadolint sc usb pylint todo count
+.PHONY: build shell root-shell run-ide run-ipe run-xforward udev start rm hadolint sc usb pylint todo
 
 build: Dockerfile
 	docker build --no-cache --rm -t $(IMAGE_NAME):$(VERSION) $(BUILD_ARGS) -f Dockerfile .
+
+argfile: BUILD_ARGS += $(shell for arg in $$(< build-args.env);do args+="--build-arg $$arg ";done; echo $$args)
+argfile: build
 
 shell:
 	docker run -it --rm $(IMAGE_NAME) /bin/bash
