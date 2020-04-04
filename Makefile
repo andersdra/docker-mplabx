@@ -15,15 +15,17 @@ XFORWARD_CONTAINER_NAME ?= mplab_xforward
 CONTAINER_CMD ?= /entrypoint.sh
 
 SESSION_TYPE ?= x11
-ENVIRONMENT ?= -e DISPLAY -e TZ=$(shell timedatectl -p Timezone show | cut -d = -f2)
+ENVIRONMENT  = -e TZ=$(shell timedatectl -p Timezone show | cut -d = -f2)
 ENVIRONMENT += -e XDG_SESSION_TYPE=$(SESSION_TYPE) -e XDG_RUNTIME_DIR=/tmp -e WAYLAND_DISPLAY
-OPTIONS ?= --cap-drop=ALL --cap-add=MKNOD
-MOUNTS ?= $(X11_SOCKET) $(MPLABX_FOLDER) $(PROJECT_FOLDER)
-MOUNTS += -v $$XDG_RUNTIME_DIR/$$WAYLAND_DISPLAY:/tmp/$$WAYLAND_DISPLAY
+ENVIRONMENT += -e DISPLAY
+OPTIONS ?= --cap-drop=ALL --cap-add=MKNOD --security-opt=no-new-privileges
+MOUNTS = $(X11_SOCKET)
+MOUNTS += -v $(XDG_RUNTIME_DIR)/$(WAYLAND_DISPLAY):/tmp/$(WAYLAND_DISPLAY)
+MOUNTS += $(MPLABX_FOLDER) $(PROJECT_FOLDER)
 BUILD_ARGS ?=
 
 .PHONY: build shell root-shell run-ide run-ipe run-xforward udev start rm hadolint
-.PHONY: sc usb pylint todo args-toolchain args
+.PHONY: sc usb pylint todo
 
 run:
 	docker run --name $(CONTAINER_NAME) $(OPTIONS) $(ENVIRONMENT) $(MOUNTS) $(IMAGE_NAME) $(CONTAINER_CMD)
@@ -32,7 +34,7 @@ build: Dockerfile
 	docker build --no-cache --rm -t $(IMAGE_NAME):$(VERSION) $(BUILD_ARGS) .
 
 argfile: build.args
-argfile: BUILD_ARGS += $(shell IFS=$$'\n';for arg in $$(< build.args);do args+="--build-arg $$arg ";done; echo $$args)
+argfile: BUILD_ARGS += $(shell IFS=$$'\n';for arg in $$(< build.args);do args+="--build-arg $$arg ";done;echo $$args)
 argfile: build
 
 run-usb: CONTAINER_NAME = $(USB_CONTAINER_NAME)
