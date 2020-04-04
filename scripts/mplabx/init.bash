@@ -35,7 +35,7 @@ apt-get -qq install --yes --no-install-recommends \
 export $(xargs < /mplabx.env)
 
 if [ -n "$ADDITIONAL_PACKAGES" ];then
-    apt-get -qq install --yes --no-install-recommends "$ADDITIONAL_PACKAGES"
+    apt-get -qq install --yes --no-install-recommends $ADDITIONAL_PACKAGES
 fi
 
 V535MINUS=1 # TODO change to 0 when v5.40 is released
