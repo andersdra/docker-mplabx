@@ -95,7 +95,33 @@ Example for building v5.15:
 ### Running
 
 	make run-ide
+
+### WSL2  
+Probably only works on windows insider slow/fast ring.  
+IDE/IPE requires an X-server running on Windows host. (MobaXterm etc. (remote access needs to be enabled since communication is via TCP/IP))  
+Docker for Desktop with WSL backend support enabled for MPLABX WSL image will mess with docker context, this method uses WSL2's native docker socket.  
+
+Not working:  
+- Terminal does not load shell  
+- unable to create a project because of 'invalid project name'
+
+Run commands in powershell as administrator.  
+
+#### Enable WSL and HYPER-V  
+	dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
+	dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /promptrestart  
+
+#### Download and install latest WSL kernel, set WSL2 as default  
+	kernel_url = https://wslstorestorage.blob.core.windows.net/wslblob/wsl_update_x64.msi
+	download_dir = (New-Object -ComObject Shell.Application).NameSpace('shell:Downloads').Self.Path
+	Invoke-WebRequest $kernel_url -OutFile $download_dir\wsl_update_x64.msi
+	msiexec /a $download_dir\wsl_update_x64.msi /passive /norestart
+	Remove-Item $download_dir\wsl_update_x64.msi
+	wsl --set-default-version 2
+
+Start a Debian WSL image downloaded from Microsoft store, install git, clone repo, sudo ./docker-mplabx/scripts/wsl/init.bash, build, run
 	
+
 # Info/Troubleshooting
 
 [**Missing header files**](doc/header_include_path.png)
@@ -131,9 +157,6 @@ AVR and MPLAB are registered trademarks of Microchip in the U.S.A. and other cou
 # Todo
 
 - Avoid mounting whole USB bus
-- xpra for X11 isolation
-- Wayland support
-- Test on Windows
 
 
 # License
