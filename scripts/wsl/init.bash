@@ -14,8 +14,6 @@ sudo ./docker_wsl.bash
 
 echo 'sudo /etc/init.d/docker start' >> ~/.bashrc
 echo "export DISPLAY=$(grep nameserver /etc/resolv.conf | cut -d' ' -f2):0" >> ~/.bashrc
-update-alternatives --set iptables /usr/sbin/iptables-legacy
-update-alternatives --set ip6tables /usr/sbin/ip6tables-legacy
 source "$HOME"/.bashrc
 newgrp docker
 docker run hello-world

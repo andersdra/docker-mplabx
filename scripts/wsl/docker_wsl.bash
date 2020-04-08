@@ -20,6 +20,8 @@ add-apt-repository \
 apt-get update
 apt-get install --yes docker-ce
 
+update-alternatives --set iptables /usr/sbin/iptables-legacy
+update-alternatives --set ip6tables /usr/sbin/ip6tables-legacy
 touch /etc/fstab
 /etc/init.d/docker start
 usermod -aG docker "$SUDO_USER"
