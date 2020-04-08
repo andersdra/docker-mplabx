@@ -15,6 +15,8 @@ while ! part_file_exists;do
     sleep 5
 done
 
+sleep 10
+
 while :;do
   if ! part_file_exists;then
     echo "Finished download(s)"
