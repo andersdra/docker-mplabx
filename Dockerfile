@@ -2,7 +2,7 @@
 # AVR, ARM GCC
 # Microchip XC8, XC16, XC32 
 # Source and docs: https://gitlab.com/andersdra/docker-mplabx
-FROM python:3.8 AS toolchains
+FROM python:3.8.5-slim-buster AS toolchains
 
 ARG MCP_USER
 ARG MCP_PASS

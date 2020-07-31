@@ -7,6 +7,15 @@ import pickle
 import multiprocessing as mp
 from time import sleep
 from selenium import webdriver
+from selenium.webdriver.firefox.options import Options
+from selenium.webdriver.firefox.firefox_binary import FirefoxBinary
+
+binary = FirefoxBinary('/tmp/firefox/firefox')
+
+options = Options()
+options.headless = True
+
+mcp_url='https://www.microchip.com/wwwregister/default.aspx?ReturnURL=https://www.microchip.com/mymicrochip/%23/?mode=SetPreference&RedirectedFrom=Login&DestURL=Home'
 
 toolchains = ['AVRGCC', 'ARMGCC', 'MCPXC8', 'MCPXC16', 'MCPXC32', 'MPLAB_HARMONY', 'PIC32_LEGACY', 'OTHERMCU']
 
@@ -26,7 +35,7 @@ application/x-zip, \
 application/x-gtar, \
 application/x-7z-compressed')
 profile.update_preferences()
-driver = webdriver.Firefox(firefox_profile=profile, service_log_path=os.path.devnull)
+driver = webdriver.Firefox(firefox_profile=profile, service_log_path=os.path.devnull, firefox_binary=binary, options=options)
 
 def save_cookie(web_driver, path):
     with open(path, 'wb') as filehandler:
@@ -40,7 +49,7 @@ def load_cookie(web_driver, path):
 
 
 def mcp_login(mc_user, mc_pass):
-    driver.get('https://www.microchip.com/mymicrochip/')
+    driver.get(mcp_url)
     username = driver.find_element_by_id('_ctl0__ctl0_MainContent_PageContent_Login1_txtAccount')
     username.send_keys(mc_user)
     password = driver.find_element_by_id('_ctl0__ctl0_MainContent_PageContent_Login1_txtPassword')
@@ -51,7 +60,7 @@ def mcp_login(mc_user, mc_pass):
 
 
 def mcp_get(dl_url):
-    dl = webdriver.Firefox(firefox_profile=profile, service_log_path=os.path.devnull)
+    dl = webdriver.Firefox(firefox_profile=profile, service_log_path=os.path.devnull, firefox_binary=binary, options=options)
     dl.get('https://www.microchip.com/mymicrochip/')
     load_cookie(dl, '/tmp/selenium_cookies')
     a = mp.Process(target=dl.get, args=(dl_url,))
@@ -64,7 +73,6 @@ def check_downloads():
         if '.part' in filename:
             print("{} size; {}".format(filename, os.path.getsize(os.environ['DOWNLOAD_DIR'] + "/{}".format(filename))))
             downloads += 1
-            sleep(1)
     if downloads:
         sleep(2)
         check_downloads()
@@ -82,10 +90,11 @@ for tool in toolchains:
             if '.microchip.com' in url:
                 print('Starting download of {}'.format(tool))
                 mcp_get(os.environ[tool + '_URL'])
-                sleep(2)
+                sleep(.5)
             else:
                 print('User defined {} URL {}'.format(tool, url))
 
+sleep(1)
 check_downloads()
 sys.exit(0)
 

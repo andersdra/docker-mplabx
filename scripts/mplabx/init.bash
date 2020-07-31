@@ -30,7 +30,7 @@ apt-get -qq install --yes --no-install-recommends \
     procps \
     python3 \
     xz-utils \
-    x11-utils
+    x11-utils &> /dev/null
 
 export $(xargs < /mplabx.env)
 

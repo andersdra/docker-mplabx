@@ -18,7 +18,7 @@ done
 while :;do
   if ! part_file_exists;then
     echo "Finished download(s)"
-    pgrep firefox-esr | xargs kill
+    pgrep Web | xargs kill
     exit 0
   fi
   sleep 5

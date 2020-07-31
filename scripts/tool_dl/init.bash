@@ -13,10 +13,15 @@ mkdir /toolchains # IDE only build fails at copy stage without this..
 
 if [ "$MCP_USER" ] && [ "$MCP_PASS" ]
 then
-  apt-get update \
-  && apt-get install --yes firefox-esr \
-     findutils \
-     xvfb
+  apt-get update &> /dev/null \
+  && apt-get install --yes bzip2 \
+      curl \
+      findutils \
+      libdbus-glib-1-2 \
+      libgtk-3-0 \
+      procps \
+      xvfb \
+      wget &> /dev/null
   pip3 install selenium \
   && latest_release="$(curl https://github.com/mozilla/geckodriver/releases 2> /dev/null \
     | grep -io \
@@ -26,9 +31,11 @@ then
   && wget --quiet "https://github.com$latest_release" \
   && tar xf geckodriver*.tar.gz \
   && mv geckodriver /bin
+  curl -L 'https://download.mozilla.org/?product=firefox-latest-ssl&os=linux64' > /tmp/firefox.tar 2> /dev/null
+  tar xf /tmp/firefox.tar -C /tmp
   /kill_firefox.bash &
   echo 'Starting download of toolchain(s)'
-  xvfb-run /toolchains.py
+  MOZ_HEADLESS_HEIGHT=1080 MOZ_HEADLESS_WIDTH=1920 xvfb-run /toolchains.py
 else
   echo 'No user/password input for myMicrochip downloads'
   exit 0 # self provided url's or ide/ipe only
