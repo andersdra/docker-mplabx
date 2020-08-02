@@ -12,7 +12,7 @@ while ! part_file_exists;do
     if part_file_exists;then
         break
     fi
-    sleep 5
+    sleep 1
 done
 
 while :;do
@@ -21,5 +21,5 @@ while :;do
     pgrep Web | xargs kill
     exit 0
   fi
-  sleep 5
+  sleep 1
 done

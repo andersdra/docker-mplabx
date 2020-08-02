@@ -28,7 +28,7 @@ Keep a backup when updating the image, you will be asked what you want to import
 
 ## Building  
 
-Edit Makefile or use --build-args.  
+Edit build.args, Makefile or use --build-args.  
 
 **Downloading {AVR,ARM}GCC from Microchip now requires a user**  
 
@@ -66,6 +66,7 @@ Edit Makefile or use --build-args.
 	PIC32_LEGACY=0
 	MPLAB_HARMONY=0
 	OTHERMCU=0 # only valid for >= V5.20 (SERIALEE, HCSxxxx) (2.0MB)
+	NO_PIC_DFP=0 # removes ~3GB of PIC related DFP's
 	
 #### Custom tool version args
     
@@ -97,6 +98,8 @@ Example for building v5.15:
 	make run-ide
 	
 # Info/Troubleshooting
+
+When using Firefox instead of the embedded webkit browser, edit browser arguments to `--profile /home/mplabx/.firefox_profile`  
 
 [**Missing header files**](doc/header_include_path.png)
 

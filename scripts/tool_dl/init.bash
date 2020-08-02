@@ -22,20 +22,24 @@ then
       procps \
       xvfb \
       wget &> /dev/null
-  pip3 install selenium \
-  && latest_release="$(curl https://github.com/mozilla/geckodriver/releases 2> /dev/null \
+  pip3 install selenium
+  latest_release="$(curl https://github.com/mozilla/geckodriver/releases 2> /dev/null \
     | grep -io \
 "/mozilla/geckodriver/releases/download/v0.[0-9]*.[0-9]*/geckodriver-v0.[0-9]*.[0-9]*-linux64.tar.gz" \
-    | head -1)" \
-  && echo 'Downloading geckodriver' \
-  && wget --quiet "https://github.com$latest_release" \
-  && tar xf geckodriver*.tar.gz \
-  && mv geckodriver /bin
+    | head -1)"
+  echo 'Downloading geckodriver'
+  wget --quiet "https://github.com$latest_release"
+  tar xf geckodriver*.tar.gz
+  mv geckodriver /bin
+  # get latest firefox release to match geckodriver, change to nightly if new mismatch occurs
   curl -L 'https://download.mozilla.org/?product=firefox-latest-ssl&os=linux64' > /tmp/firefox.tar 2> /dev/null
   tar xf /tmp/firefox.tar -C /tmp
   /kill_firefox.bash &
   echo 'Starting download of toolchain(s)'
   MOZ_HEADLESS_HEIGHT=1080 MOZ_HEADLESS_WIDTH=1920 xvfb-run /toolchains.py
+  printf "\nls %s\n" $DOWNLOAD_DIR
+  ls "$DOWNLOAD_DIR"
+  echo ''
 else
   echo 'No user/password input for myMicrochip downloads'
   exit 0 # self provided url's or ide/ipe only

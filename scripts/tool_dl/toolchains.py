@@ -74,7 +74,7 @@ def check_downloads():
             print("{} size; {}".format(filename, os.path.getsize(os.environ['DOWNLOAD_DIR'] + "/{}".format(filename))))
             downloads += 1
     if downloads:
-        sleep(2)
+        sleep(.1)
         check_downloads()
 
 try:
@@ -94,7 +94,6 @@ for tool in toolchains:
             else:
                 print('User defined {} URL {}'.format(tool, url))
 
-sleep(1)
 check_downloads()
 sys.exit(0)
 

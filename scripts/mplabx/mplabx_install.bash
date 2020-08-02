@@ -57,7 +57,7 @@ fi
 
 printf '\nMPLAB X\n'
 
-curl --location "$MPLABX_URL" > '/tmp/mplabx_installer.tar' \
+curl --location "$MPLABX_URL" > '/tmp/mplabx_installer.tar' 2> /dev/null \
 && tar xf '/tmp/mplabx_installer.tar' -C /tmp \
 && rm /tmp/mplabx_installer.tar
 
@@ -65,7 +65,7 @@ bash -c "$install_cmd"
 
 if [ "$MPLABX_DARCULA" -eq 1 ];then
     echo "Downloading Darcula Theme"
-    curl "$DARCULA_URL" > "$C_HOME/darcula_theme.nbm"
+    curl "$DARCULA_URL" > "$C_HOME/darcula_theme.nbm" 2> /dev/null
 fi
 
 cd "$C_HOME" \

@@ -70,14 +70,6 @@ if [ "$MCPXC16" -eq 1 ]
        --mode unattended \
        --netservername localhost \
        --LicenseType FreeMode
-else
-    V535PLUS=$(bc -l <<< "$MPLABX_VERSION >= 5.35")
-    if [ "$MPLABX_VERSION" -eq 0 ] || [ "$V535PLUS" -eq 1 ]
-    then
-      rm -rf /opt/microchip/mplabx/v5.35/packs/Microchip/PIC*_DFP
-      rm -rf /opt/microchip/mplabx/v5.35/packs/Microchip/MCPxxxx_DFP
-      rm -rf /opt/microchip/mplabx/v5.35/mpasmx
-    fi
 fi
 
 # 32 bit PIC stuff

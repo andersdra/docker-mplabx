@@ -15,6 +15,7 @@ ARG MCPXC32=0
 ARG PIC32_LEGACY=0
 ARG MPLAB_HARMONY=0
 ARG OTHERMCU=0
+ARG NO_PIC_DFP=0
 
 ARG AVRGCC_URL='https://www.microchip.com/mymicrochip/filehandler.aspx?ddocname=en607660'
 ARG ARMGCC_URL='https://www.microchip.com/mymicrochip/filehandler.aspx?ddocname=en603996'
