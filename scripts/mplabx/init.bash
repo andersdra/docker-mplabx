@@ -1,7 +1,5 @@
 #!/bin/bash
 # shellcheck disable=SC2046
-#
-# TODO: MPLABX_VERSION must be set manually if not original microchip url
 
 mkdir -p /usr/share/man/man1 # long forgotten, but fixes some error
 
@@ -34,24 +32,15 @@ apt-get -qq install --yes --no-install-recommends \
 
 export $(xargs < /mplabx.env)
 
-
-V535MINUS=1 # TODO change to 0 when v5.40 is released
-if [ "$MPLABX_VERSION" != 0 ];then
-    V535MINUS=$(bc -l <<< "$MPLABX_VERSION <= 5.35")
-fi
-
-# mplabx >= v5.40 will be 64bit
-if [ "$V535MINUS" -eq 1 ];then
-  echo 'Installing 32bit libraries'
-  dpkg --add-architecture i386
-  apt-get update &> /dev/null
-  apt-get -qq install --yes --no-install-recommends \
-    libc6:i386 \
-    libx11-6:i386 \
-    libxext6:i386 \
-    libstdc++6:i386 \
-    libexpat1:i386 &> /dev/null
-fi
+echo 'Installing 32bit libraries'
+dpkg --add-architecture i386
+apt-get update &> /dev/null
+apt-get -qq install --yes --no-install-recommends \
+  libc6:i386 \
+  libx11-6:i386 \
+  libxext6:i386 \
+  libstdc++6:i386 \
+  libexpat1:i386 &> /dev/null
 
 V530MINUS=0
 if python3 -c "exit(0) if $MPLABX_VERSION > 0 else exit(1)";then
@@ -101,7 +90,7 @@ fi
 # cleanup removes firefox even with pinning..
 if [ -n "$ADDITIONAL_PACKAGES" ];then
     echo "Installing $ADDITIONAL_PACKAGES"
-    apt-get -qq install --yes --no-install-recommends $ADDITIONAL_PACKAGES &> /dev/null
+    apt-get install --yes --no-install-recommends $ADDITIONAL_PACKAGES &> /dev/null
 fi
 
 rm --recursive --force /usr/share/man/* \

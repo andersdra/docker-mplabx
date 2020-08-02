@@ -16,5 +16,4 @@ rm /usr/lib/x86_64-linux-gnu/dri/r600_dri.so
 rm /usr/lib/x86_64-linux-gnu/dri/r300_dri.so
 rm /usr/lib/x86_64-linux-gnu/dri/nouveau_dri.so
 rm /usr/lib/x86_64-linux-gnu/dri/kms_swrast_dri.so
-rm /usr/bin/perl
 fi

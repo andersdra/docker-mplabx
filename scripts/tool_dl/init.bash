@@ -2,6 +2,18 @@
 
 mkdir /toolchains # IDE only build fails at copy stage without this..
 
+# Check if MPLABX_VERSION is set when not downloading IDE from Microchip
+if [ "$MPLABX_IDE" = 1 ];then
+  if ! grep .microchip <<< $MPLABX_URL &> /dev/null;then
+    if [ "$MPLABX_VERSION" = 0 ];then
+      echo 'MPLABX_VERSION must be set when not downloading from Microchip'
+      exit 1
+    else
+      echo "MPLAB X v$MPLABX_VERSION will be downloaded from $MPLABX_URL"
+    fi
+  fi
+fi
+
 # save build-args for second stage
 (
   IFS=$'\n'
@@ -32,14 +44,12 @@ then
   tar xf geckodriver*.tar.gz
   mv geckodriver /bin
   # get latest firefox release to match geckodriver, change to nightly if new mismatch occurs
-  curl -L 'https://download.mozilla.org/?product=firefox-latest-ssl&os=linux64' > /tmp/firefox.tar 2> /dev/null
+  curl -L "$FIREFOX_URL" > /tmp/firefox.tar 2> /dev/null
   tar xf /tmp/firefox.tar -C /tmp
   /kill_firefox.bash &
   echo 'Starting download of toolchain(s)'
   MOZ_HEADLESS_HEIGHT=1080 MOZ_HEADLESS_WIDTH=1920 xvfb-run /toolchains.py
-  printf "\nls %s\n" $DOWNLOAD_DIR
-  ls "$DOWNLOAD_DIR"
-  echo ''
+  printf "\nls %s\n%s\n\n" $DOWNLOAD_DIR "$(ls /toolchains)"
 else
   echo 'No user/password input for myMicrochip downloads'
   exit 0 # self provided url's or ide/ipe only

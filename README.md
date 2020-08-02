@@ -99,7 +99,7 @@ Example for building v5.15:
 	
 # Info/Troubleshooting
 
-When using Firefox instead of the embedded webkit browser, edit browser arguments to `--profile /home/mplabx/.firefox_profile`  
+When using Firefox instead of the embedded webkit browser, edit browser arguments to `--profile /home/mplabx/.firefox_profile {URL}`  
 
 [**Missing header files**](doc/header_include_path.png)
 

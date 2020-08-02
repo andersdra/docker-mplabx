@@ -19,6 +19,7 @@ ENVIRONMENT  = -e TZ=$(shell timedatectl -p Timezone show | cut -d = -f2)
 ENVIRONMENT += -e XDG_SESSION_TYPE=$(SESSION_TYPE) -e XDG_RUNTIME_DIR=/tmp -e WAYLAND_DISPLAY
 ENVIRONMENT += -e DISPLAY
 OPTIONS ?= --cap-drop=ALL --cap-add=MKNOD --security-opt=no-new-privileges
+OPTIONS += --shm-size 128m # Microchip's page is heavy... only needed for Firefox
 MOUNTS = $(X11_SOCKET)
 MOUNTS += -v $(XDG_RUNTIME_DIR)/$(WAYLAND_DISPLAY):/tmp/$(WAYLAND_DISPLAY)
 MOUNTS += $(MPLABX_FOLDER) $(PROJECT_FOLDER)
@@ -86,10 +87,10 @@ todo:
 stats:
 	cloc --exclude-list-file=.cloc_exclude .
 
-grep-args-toolchain:
-	grep ARG Dockerfile | sed -n '/AVRGCC/,/DOWNLOAD_DIR/p' | cut -d ' ' -f2 | cut -d = -f1
+update-args:
+	@grep ARG Dockerfile | sed -n '/AVRGCC/,/DOWNLOAD_DIR/p' | cut -d ' ' -f2 | cut -d = -f1 > scripts/tool_dl/build-args.env
 
-grep-args:
+args:
 	grep ARG Dockerfile | cut -d ' ' -f2
 
 shell:
