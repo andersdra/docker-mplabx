@@ -48,7 +48,7 @@ fi
 if [ "$CUSTOM_VERSION" -gt 0 ];then
   # confirm version ending in [.05, .10] etc
     if python3 -c "exit(0) if $MPLABX_VERSION * 100 % 5 == 0 else exit(1)";then
-      if grep .microchip <<< $MPLABX_URL &> /dev/null;then
+      if grep .microchip <<< "$MPLABX_URL" &> /dev/null;then
         MPLABX_URL="https://ww1.microchip.com/downloads/en/DeviceDoc/MPLABX-v$MPLABX_VERSION-linux-installer.tar"
       fi
     else
@@ -59,11 +59,15 @@ fi
 
 printf '\nMPLAB X\n'
 
-curl --location "$MPLABX_URL" > '/tmp/mplabx_installer.tar' 2> /dev/null \
-&& tar xf '/tmp/mplabx_installer.tar' -C /tmp \
-&& rm /tmp/mplabx_installer.tar
+curl --location "$MPLABX_URL" > '/tmp/mplabx_installer.tar' 2> /dev/null
+tar xf '/tmp/mplabx_installer.tar' -C /tmp
+rm /tmp/mplabx_installer.tar
 
 bash -c "$install_cmd"
+
+# save ide version
+MPLABX_V="$(basename "$(find /opt/microchip/mplabx/ -mindepth 1 -maxdepth 1 -type d)")"
+echo "MPLABX_V=$MPLABX_V" >> "$TOOLCHAINS"
 
 if [ "$MPLABX_DARCULA" -eq 1 ];then
     echo "Downloading Darcula Theme"

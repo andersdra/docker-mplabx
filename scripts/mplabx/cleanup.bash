@@ -10,7 +10,7 @@ rm /usr/lib/x86_64-linux-gnu/dri/i915_dri.so
 
 rm /usr/lib/x86_64-linux-gnu/dri/vmwgfx_dri.so
 rm /usr/lib/x86_64-linux-gnu/dri/virtio_gpu_dri.so
-rm /usr/lib/x86_64-linux-gnu/dri/swrast_dri.so
+#rm /usr/lib/x86_64-linux-gnu/dri/swrast_dri.so
 rm /usr/lib/x86_64-linux-gnu/dri/radeonsi_dri.so
 rm /usr/lib/x86_64-linux-gnu/dri/r600_dri.so
 rm /usr/lib/x86_64-linux-gnu/dri/r300_dri.so

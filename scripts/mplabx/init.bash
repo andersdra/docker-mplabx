@@ -1,7 +1,11 @@
 #!/bin/bash
+set -x
+
 # shellcheck disable=SC2046
+export $(xargs < /mplabx.env)
 
 mkdir -p /usr/share/man/man1 # long forgotten, but fixes some error
+mkdir -p "$TOOLCHAIN_DIR"
 
 apt-get update &> /dev/null
 apt-get -qq install --yes --no-install-recommends \
@@ -30,8 +34,6 @@ apt-get -qq install --yes --no-install-recommends \
     xz-utils \
     x11-utils &> /dev/null
 
-export $(xargs < /mplabx.env)
-
 echo 'Installing 32bit libraries'
 dpkg --add-architecture i386
 apt-get update &> /dev/null
@@ -56,21 +58,26 @@ fi
 && /mplabx_install.bash \
 && /toolchain_install.bash \
 && /startup_script.bash
-mkdir /home/$C_USER/.firefox_profile
+
+mkdir "/home/$C_USER/.firefox_profile"
+mv /verify.bash "$C_HOME"
 
 if [ ! "$C_USER" = root ];then
     chmod --recursive 755 "$C_HOME" \
     && chown --recursive --from=0:0 "$C_USER:$C_USER" "$C_HOME"
 fi
 
+HOME=$C_HOME "$C_HOME/verify.bash" sum
+sha256sum "$TOOLCHAINS" > "$C_HOME/toolchains.shasum"
+
 echo 'Cleanup'
 /cleanup.bash
 apt-get purge --yes bc curl procps python3 make xz-utils &> /dev/null
 apt-get -qq clean autoclean &> /dev/null
 
-if [ $NO_PIC_DFP -eq 1 ];then
+if [ "$NO_PIC_DFP" -eq 1 ];then
     echo "Deleting PIC DFP's"
-    find $(find /opt/microchip -name "v*[05]")/packs/Microchip -name "PIC*_DFP" -exec rm -r {} +
+    find "$(find /opt/microchip -name "v*[05]")"/packs/Microchip -name "PIC*_DFP" -exec rm -r {} +
 : '
 PIC*_DFP folders
 ./PIC16Fxxx_DFP
@@ -90,7 +97,14 @@ fi
 # cleanup removes firefox even with pinning..
 if [ -n "$ADDITIONAL_PACKAGES" ];then
     echo "Installing $ADDITIONAL_PACKAGES"
-    apt-get install --yes --no-install-recommends $ADDITIONAL_PACKAGES &> /dev/null
+    for package in $ADDITIONAL_PACKAGES;do
+      apt-get install --yes --no-install-recommends "$package"
+    done
+fi
+
+if [ "$FIREFOX" -eq 1 ];then
+    echo 'Installing firefox-esr'
+    apt-get install --yes --no-install-recommends firefox-esr &> /dev/null
 fi
 
 rm --recursive --force /usr/share/man/* \

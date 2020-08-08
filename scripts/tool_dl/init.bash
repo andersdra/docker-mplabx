@@ -1,10 +1,11 @@
 #!/bin/bash
+set -x
 
 mkdir /toolchains # IDE only build fails at copy stage without this..
 
 # Check if MPLABX_VERSION is set when not downloading IDE from Microchip
 if [ "$MPLABX_IDE" = 1 ];then
-  if ! grep .microchip <<< $MPLABX_URL &> /dev/null;then
+  if ! grep .microchip <<< "$MPLABX_URL" &> /dev/null;then
     if [ "$MPLABX_VERSION" = 0 ];then
       echo 'MPLABX_VERSION must be set when not downloading from Microchip'
       exit 1
@@ -19,7 +20,9 @@ fi
   IFS=$'\n'
   for env in $(< build-args.env)
   do
-    echo "$env=$(printenv $env)" >> mplabx.env
+# shellcheck disable=SC2086
+    env_var="$env=$(printenv $env)"
+    echo "$env_var" >> mplabx.env
   done
 )
 
@@ -49,7 +52,7 @@ then
   /kill_firefox.bash &
   echo 'Starting download of toolchain(s)'
   MOZ_HEADLESS_HEIGHT=1080 MOZ_HEADLESS_WIDTH=1920 xvfb-run /toolchains.py
-  printf "\nls %s\n%s\n\n" $DOWNLOAD_DIR "$(ls /toolchains)"
+  printf "\nls %s\n%s\n\n" "$DOWNLOAD_DIR" "$(ls /toolchains)"
 else
   echo 'No user/password input for myMicrochip downloads'
   exit 0 # self provided url's or ide/ipe only

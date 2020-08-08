@@ -2,7 +2,7 @@
 # docker-mplabx
 # hackish PATH startup script
 
-tcs=$(find /opt -maxdepth 3 -type d -name bin)
+tcs=$(find "$TOOLCHAIN_DIR" -maxdepth 3 -type d -name bin)
 path=''
 
 for tool_path in $tcs;
@@ -19,7 +19,38 @@ then
 #!/bin/bash
 JAVA_HOME=$JAVA_HOME
 PATH=$path$PATH
-/usr/bin/mplab_ide --userdir $C_HOME/mplabx --jdkhome "$JAVA_HOME"
+TOOLCHAIN_DIR=$TOOLCHAIN_DIR
+
+if [ -z "\$1" ];then
+  if "$C_HOME/verify.bash" verify;then
+    /usr/bin/mplab_ide --userdir "$C_HOME/mplabx" --jdkhome "$JAVA_HOME"
+  else
+    echo 'Toolchain verification failed'
+    exit 1
+  fi
+fi
+
+if [ -n "\$1" ];then
+case \$1 in
+verify)
+  "$C_HOME/verify.bash" verify
+;;
+toolchains)
+  cat "$C_HOME/toolchains.env"
+  if [ -n "\$2" ];then
+    echo "\$2 $C_HOME/toolchains.env" | sha256sum -c
+  else
+    sha256sum "$C_HOME/toolchains.env" | cut -d' ' -f1
+fi
+;;
+hash)
+  sha256sum "$C_HOME/toolchains.env" | cut -d' ' -f1
+;;
+bash)
+  bash
+;;
+esac
+fi
 EOF
     cat >> "$C_HOME"/.bashrc << EOF
 #.bashrc mplabx
@@ -28,8 +59,6 @@ PATH="$path$PATH:$mplabx_bin"
 export JAVA_HOME
 export PATH
 shopt -s checkwinsize
-alias l='ls'
-alias -- -='cd -'
 EOF
 else # toolchain container
     cat > /entrypoint.sh << EOF

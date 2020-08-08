@@ -19,6 +19,7 @@ ARG MPLAB_HARMONY=0
 ARG OTHERMCU=0
 ARG MPLABX_VERSION=0
 
+ARG FIREFOX=0
 ARG MPLABX_IDE=1
 ARG MPLABX_IDE_ENTRY=1
 ARG MPLABX_IPE=0
@@ -35,6 +36,8 @@ ARG MCPXC32_URL='https://www.microchip.com/mplabxc32linux'
 ARG MPLABX_URL='https://www.microchip.com/mplabx-ide-linux-installer'
 ARG MPLAB_HARMONY_URL='https://www.microchip.com/mymicrochip/filehandler.aspx?ddocname=en606318'
 ARG PIC32_LEGACY_URL='http://ww1.microchip.com/downloads/en//softwarelibrary/pic32%20peripheral%20library/pic32%20legacy%20peripheral%20libraries%20linux%20(2).tar'
+
+ARG TOOLCHAIN_DIR='/opt/toolchains'
 ARG DOWNLOAD_DIR='/toolchains'
 # End second stage args
 
@@ -64,13 +67,14 @@ COPY scripts/mplabx /
 COPY --from=toolchains /mplabx.env /
 COPY --from=toolchains /toolchains/ /toolchains
 
-RUN chmod +x /*.bash && /init.bash
-
 ENV USER=${C_USER}
 ENV SHELL=/bin/bash
 ENV HOME=${C_HOME}
+ENV TOOLCHAINS="${C_HOME}/toolchains.env"
 
+RUN chmod +x /*.bash && /init.bash
+ 
 USER $C_USER
 WORKDIR $C_HOME
 
-CMD ["/entrypoint.sh"]
+ENTRYPOINT ["/entrypoint.sh"]

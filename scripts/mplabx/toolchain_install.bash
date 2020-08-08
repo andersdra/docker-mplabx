@@ -2,6 +2,17 @@
 # docker-mplabx
 # download and install toolchains
 
+set -x
+
+toolchain_append(){
+  echo "$1" >> "$TOOLCHAINS"
+}
+
+extract_toolchain(){
+    tar xf "$1" -C "$2"
+    rm "$1"
+}
+
 # ARDUINO
 # TODO: this has never worked, problem with plugin/procedure
 if [ "$ARDUINO" -eq 1 ]
@@ -18,9 +29,8 @@ if [ "$ARDUINO" -eq 1 ]
     fi
     curl --location "$ARDUINO_URL" > /tmp/arduino_x64.tar.xz \
     && unxz /tmp/arduino_x64.tar.xz \
-    && tar xf /tmp/arduino_x64.tar -C /opt/ \
-    && rm /tmp/arduino_x64.tar \
-    && arduino_install="$(find /opt/arduino*/install.sh)" \
+    && extract_toolchain /tmp/arduino_x64.tar "$TOOLCHAIN_DIR" \
+    && arduino_install="$(find "$TOOLCHAIN_DIR"/arduino*/install.sh)" \
     && bash "$arduino_install"
 fi
 
@@ -33,7 +43,9 @@ if [ "$AVRGCC" -eq 1 ]
       echo 'Downloading AVRGCC'
       curl --location "$AVRGCC_URL" -o "$DOWNLOAD_DIR/avr8-gnu-custom.tar.gz"
     fi
-    tar xf "$(find "$DOWNLOAD_DIR" -name 'avr8-gnu*.tar.gz')" -C /opt/
+    extract_toolchain "$(find "$DOWNLOAD_DIR" -name 'avr8-gnu*.tar.gz')" "$TOOLCHAIN_DIR"
+    AVR_TOOLCHAIN_VERSION="$($(find "$TOOLCHAIN_DIR" -name avr-gcc) -v 2>&1 | grep 'gcc version' | xargs)" # xargs for whitespace removal
+    toolchain_append "AVR_TOOLCHAIN_VERSION='$AVR_TOOLCHAIN_VERSION'"
 fi
 
 # ARM GCC
@@ -45,7 +57,7 @@ if [ "$ARMGCC" -eq 1 ]
       echo 'Downloading ARMGCC'
       curl --location "$ARMGCC_URL" -o "$DOWNLOAD_DIR/arm-gnu-custom.tar.gz"
     fi
-    tar xf "$(find "$DOWNLOAD_DIR" -name 'arm-gnu*.tar.gz')" -C /opt/
+    extract_toolchain "$(find "$DOWNLOAD_DIR" -name 'arm-gnu*.tar.gz')" "$TOOLCHAIN_DIR"
 fi
 
 # XC8
@@ -58,6 +70,7 @@ if [ "$MCPXC8" -eq 1 ]
        --mode unattended \
        --netservername localhost \
        --LicenseType FreeMode
+    rm "$xc8_installer"
 fi
 
 # XC16
@@ -70,6 +83,7 @@ if [ "$MCPXC16" -eq 1 ]
        --mode unattended \
        --netservername localhost \
        --LicenseType FreeMode
+    rm "$xc16_installer"
 fi
 
 # 32 bit PIC stuff
@@ -98,7 +112,8 @@ if [ "$MCPXC32" -eq 1 ]
     && USER=root "$xc32_installer" \
       --mode unattended \
       --netservername localhost \
-      --LicenseType FreeMode
+      --LicenseType FreeMode \
+    && rm "$xc32_installer"
 
     if [ "$PIC32_LEGACY" -eq 1 ]
       then

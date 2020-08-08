@@ -12,7 +12,7 @@ CONTAINER_NAME ?= mplab_ide
 USB_CONTAINER_NAME ?= mplab_usb
 IPE_CONTAINER_NAME ?= mplab_ipe
 XFORWARD_CONTAINER_NAME ?= mplab_xforward
-CONTAINER_CMD ?= /entrypoint.sh
+CONTAINER_CMD ?= 
 
 SESSION_TYPE ?= x11
 ENVIRONMENT  = -e TZ=$(shell timedatectl -p Timezone show | cut -d = -f2)
