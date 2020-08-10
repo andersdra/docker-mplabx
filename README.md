@@ -95,16 +95,15 @@ Example for building v5.15:
 	
 ### Running
 
-	make run-ide
+	make run
 
 ### WSL2  
-Probably only works on windows insider slow/fast ring.  
 IDE/IPE requires an X-server running on Windows host. (MobaXterm etc. (remote access needs to be enabled since communication is via TCP/IP))  
 Docker for Desktop with WSL backend support enabled for MPLABX WSL image will mess with docker context, this method uses WSL2's native docker socket.  
 
 Not working:  
-- Terminal does not load shell  
-- unable to create a project because of 'invalid project name'
+- ~~Terminal does not load shell~~  
+- ~~unable to create a project because of 'invalid project name'~~
 
 Run commands in powershell as administrator.  
 
