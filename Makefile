@@ -21,7 +21,6 @@ ENVIRONMENT += -e DISPLAY
 OPTIONS ?= --cap-drop=ALL --cap-add=MKNOD --security-opt=no-new-privileges
 OPTIONS += --shm-size 128m # Microchip's page is heavy... only needed for Firefox
 MOUNTS = $(X11_SOCKET)
-MOUNTS += -v $(XDG_RUNTIME_DIR)/$(WAYLAND_DISPLAY):/tmp/$(WAYLAND_DISPLAY)
 MOUNTS += $(MPLABX_FOLDER) $(PROJECT_FOLDER)
 BUILD_ARGS ?=
 
