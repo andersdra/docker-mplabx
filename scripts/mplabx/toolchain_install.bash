@@ -63,19 +63,26 @@ fi
 # XC8
 if [ "$MCPXC8" -eq 1 ]
   then
+    if [ "$MCP_LOGIN" -eq 0 ];then
+      curl --location "$MCPXC8_URL" -o "$DOWNLOAD_DIR/xc8.run"
+    fi
     printf '\nMCP XC8\n'
     xc8_installer="$(find "$DOWNLOAD_DIR" -name 'xc8*.run')" \
     && chmod u+x "$xc8_installer" \
     && USER=root "$xc8_installer" \
        --mode unattended \
        --netservername localhost \
-       --LicenseType FreeMode
+       --LicenseType FreeMode \
+       --prefix "$TOOLCHAIN_DIR"
     rm "$xc8_installer"
 fi
 
 # XC16
 if [ "$MCPXC16" -eq 1 ]
   then
+    if [ "$MCP_LOGIN" -eq 0 ];then
+      curl --location "$MCPXC16_URL" -o "$DOWNLOAD_DIR/xc16.run"
+    fi
     printf '\nMCP XC16\n'
     xc16_installer="$(find "$DOWNLOAD_DIR" -name 'xc16*.run')" \
     && chmod u+x "$xc16_installer" \
@@ -83,6 +90,7 @@ if [ "$MCPXC16" -eq 1 ]
        --mode unattended \
        --netservername localhost \
        --LicenseType FreeMode
+       --prefix "$TOOLCHAIN_DIR"
     rm "$xc16_installer"
 fi
 
@@ -96,6 +104,9 @@ fi
 # XC32 needs to be installed before legacy or harmony
 if [ "$MCPXC32" -eq 1 ]
   then
+    if [ "$MCP_LOGIN" -eq 0 ];then
+      curl --location "$MCPXC32_URL" -o "$DOWNLOAD_DIR/xc32.run"
+    fi
     printf '\nMCP XC32\n'
     if ! grep '.microchip.com' <<< "$MCPXC32_URL" > /dev/null
     then
@@ -113,14 +124,15 @@ if [ "$MCPXC32" -eq 1 ]
       --mode unattended \
       --netservername localhost \
       --LicenseType FreeMode \
-    && rm "$xc32_installer"
+      --prefix "$TOOLCHAIN_DIR"
+    rm "$xc32_installer"
 
     if [ "$PIC32_LEGACY" -eq 1 ]
       then
         printf '\nPIC32 Legacy\n' \
         && tar xf "$DOWNLOAD_DIR"/'pic32 legacy peripheral libraries linux (2).tar' -C /tmp \
         && "$(find "$DOWNLOAD_DIR" -name '*Libraries.run')" --mode unattended \
-           --prefix /opt/microchip/
+        --prefix "$TOOLCHAIN_DIR"
     fi
 
     if [ "$MPLAB_HARMONY" -eq 1 ]
@@ -128,7 +140,7 @@ if [ "$MCPXC32" -eq 1 ]
         printf '\nMPLAB Harmony\n' \
         && chmod +x /tmp/mplab_harmony \
         && /tmp/mplab_harmony --mode unattended \
-           --prefix /opt/microchip/
+        --prefix "$TOOLCHAIN_DIR"
     fi
 fi
 

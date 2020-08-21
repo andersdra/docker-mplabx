@@ -1,11 +1,12 @@
 SHELL = /bin/bash
 VERSION ?= latest
 
+CONTAINER_ENGINE ?= docker
 USB_BUS = -v /dev/bus/usb:/dev/bus/usb
 X11_SOCKET = -v /tmp/.X11-unix:/tmp/.X11-unix:ro
 MPLABX_FOLDER = -v $(PWD)/mplabx:/home/mplabx/mplabx
 PROJECT_FOLDER = -v $(PWD)/MPLABXProjects:/home/mplabx/MPLABXProjects
-XAUTH = -v $(HOME)/.Xauthority:/home/mplabx/.Xauthority:ro
+XAUTH = -v $(XAUTHORITY):/home/mplabx/.Xauthority:ro
 
 IMAGE_NAME ?= mpavrgcc
 CONTAINER_NAME ?= mplab_ide
@@ -28,10 +29,10 @@ BUILD_ARGS ?=
 .PHONY: sc usb pylint todo
 
 run:
-	docker run --name $(CONTAINER_NAME) $(OPTIONS) $(ENVIRONMENT) $(MOUNTS) $(IMAGE_NAME) $(CONTAINER_CMD)
+	$(CONTAINER_ENGINE) run --name $(CONTAINER_NAME) $(OPTIONS) $(ENVIRONMENT) $(MOUNTS) $(IMAGE_NAME) $(CONTAINER_CMD)
 
 build: Dockerfile
-	docker build --no-cache --rm -t $(IMAGE_NAME):$(VERSION) $(BUILD_ARGS) .
+	$(CONTAINER_ENGINE) build --no-cache --rm -t $(IMAGE_NAME):$(VERSION) $(BUILD_ARGS) .
 
 argfile: build.args
 argfile: BUILD_ARGS += $(shell IFS=$$'\n';for arg in $$(< build.args);do args+="--build-arg $$arg ";done;echo $$args)
@@ -56,10 +57,10 @@ run-xforward: MOUNTS += $(XAUTH)
 run-xforward: run
 
 start:
-	docker start $(CONTAINER_NAME)
+	$(CONTAINER_ENGINE) start $(CONTAINER_NAME)
 
 rm:
-	docker rm -f $(CONTAINER_NAME)
+	$(CONTAINER_ENGINE) rm -f $(CONTAINER_NAME)
 
 udev:
 	echo 'Will add ./z99-custom-microchip.rules to /etc/udev/rules.d, press enter to continue'
@@ -70,7 +71,7 @@ udev:
 lint: hadolint sc pylint
 
 hadolint:
-	docker run --rm -i hadolint/hadolint < Dockerfile || true
+	$(CONTAINER_ENGINE) run --rm -i hadolint/hadolint < Dockerfile || true
 
 sc:
 	shellcheck scripts/tool_dl/*.bash || true
@@ -93,9 +94,9 @@ args:
 	grep ARG Dockerfile | cut -d ' ' -f2
 
 shell:
-	docker run -it --rm $(IMAGE_NAME) /bin/bash
+	$(CONTAINER_ENGINE) run -it --rm $(IMAGE_NAME) /bin/bash
 
 root-shell:
-	docker run --user root -it --rm $(IMAGE_NAME) /bin/bash
+	$(CONTAINER_ENGINE) run --user root -it --rm $(IMAGE_NAME) /bin/bash
 
 default: build

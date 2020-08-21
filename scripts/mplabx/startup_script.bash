@@ -22,11 +22,15 @@ PATH=$path$PATH
 TOOLCHAIN_DIR=$TOOLCHAIN_DIR
 
 if [ -z "\$1" ];then
-  if "$C_HOME/verify.bash" verify;then
-    /usr/bin/mplab_ide --userdir "$C_HOME/mplabx" --jdkhome "$JAVA_HOME"
+  if [ -f "$C_HOME/toolchains.env" ];then
+    if "$C_HOME/verify.bash" verify;then
+      /usr/bin/mplab_ide --userdir "$C_HOME/mplabx" --jdkhome "$JAVA_HOME"
+    else
+      echo 'Toolchain verification failed'
+      exit 1
+    fi
   else
-    echo 'Toolchain verification failed'
-    exit 1
+      /usr/bin/mplab_ide --userdir "$C_HOME/mplabx" --jdkhome "$JAVA_HOME"
   fi
 fi
 

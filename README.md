@@ -1,4 +1,4 @@
-# MPLAB X IDE/IPE docker container 
+# MPLAB X IDE/IPE podman/docker container 
 
 ![Docker Cloud Build Status](https://img.shields.io/docker/cloud/build/andersdra/mplabx?style=plastic)
 ![Docker Cloud Automated build](https://img.shields.io/docker/cloud/automated/andersdra/mplabx?style=plastic)
@@ -123,6 +123,8 @@ Start a Debian WSL image downloaded from Microsoft store, install git, clone rep
 	
 
 # Info/Troubleshooting
+
+Podman need to be run with `--userns keep-id` or chown project and mplabx folder using `podman unshare chown UID:GUID folder`  
 
 When using Firefox instead of the embedded webkit browser, edit browser arguments to `--profile /home/mplabx/.firefox_profile {URL}`  
 

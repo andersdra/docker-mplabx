@@ -28,6 +28,7 @@ fi
 
 if [ "$MCP_USER" ] && [ "$MCP_PASS" ]
 then
+  echo 'MCP_LOGIN=1' >> mplabx.env
   apt-get update &> /dev/null \
   && apt-get install --yes bzip2 \
       curl \
@@ -55,5 +56,6 @@ then
   printf "\nls %s\n%s\n\n" "$DOWNLOAD_DIR" "$(ls /toolchains)"
 else
   echo 'No user/password input for myMicrochip downloads'
+  echo 'MCP_LOGIN=0' >> mplabx.env
   exit 0 # self provided url's or ide/ipe only
 fi
