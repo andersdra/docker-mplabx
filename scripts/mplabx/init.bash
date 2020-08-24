@@ -77,7 +77,7 @@ apt-get -qq clean autoclean &> /dev/null
 
 if [ "$NO_PIC_DFP" -eq 1 ];then
     echo "Deleting PIC DFP's"
-    find "$(find /opt/microchip -name "v*[05]")"/packs/Microchip -name "PIC*_DFP" -exec rm -r {} +
+    find "$(find /opt/microchip/mplabx -name "v*[05]")"/packs/Microchip -name "PIC*_DFP" -exec rm -r {} +
 : '
 PIC*_DFP folders
 ./PIC16Fxxx_DFP

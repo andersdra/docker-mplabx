@@ -6,33 +6,38 @@ USB_BUS = -v /dev/bus/usb:/dev/bus/usb
 X11_SOCKET = -v /tmp/.X11-unix:/tmp/.X11-unix:ro
 MPLABX_FOLDER = -v $(PWD)/mplabx:/home/mplabx/mplabx
 PROJECT_FOLDER = -v $(PWD)/MPLABXProjects:/home/mplabx/MPLABXProjects
-XAUTH = -v $(XAUTHORITY):/home/mplabx/.Xauthority:ro
+XAUTH = -v ${XAUTHORITY}:${XAUTHORITY}:ro
 
-IMAGE_NAME ?= mpavrgcc
+IMAGE_TAG ?= mpavrgcc
 CONTAINER_NAME ?= mplab_ide
 USB_CONTAINER_NAME ?= mplab_usb
 IPE_CONTAINER_NAME ?= mplab_ipe
 XFORWARD_CONTAINER_NAME ?= mplab_xforward
-CONTAINER_CMD ?= 
+CONTAINER_CMD ?=
 
-SESSION_TYPE ?= x11
+SESSION_TYPE ?= ${XDG_SESSION_TYPE}
 ENVIRONMENT  = -e TZ=$(shell timedatectl -p Timezone show | cut -d = -f2)
-ENVIRONMENT += -e XDG_SESSION_TYPE=$(SESSION_TYPE) -e XDG_RUNTIME_DIR=/tmp -e WAYLAND_DISPLAY
+ENVIRONMENT += -e XDG_SESSION_TYPE=$(SESSION_TYPE) -e XDG_RUNTIME_DIR=${XDG_RUNTIME_DIR} # -e WAYLAND_DISPLAY
 ENVIRONMENT += -e DISPLAY
-OPTIONS ?= --cap-drop=ALL --cap-add=MKNOD --security-opt=no-new-privileges
+OPTIONS ?=
+OPTIONS += --cap-drop=ALL --cap-add=MKNOD --security-opt=no-new-privileges
 OPTIONS += --shm-size 128m # Microchip's page is heavy... only needed for Firefox
 MOUNTS = $(X11_SOCKET)
 MOUNTS += $(MPLABX_FOLDER) $(PROJECT_FOLDER)
 BUILD_ARGS ?=
 
+ifeq ($(CONTAINER_ENGINE),podman)
+       OPTIONS += --userns=keep-id
+endif
+
 .PHONY: build shell root-shell run-ide run-ipe run-xforward udev start rm hadolint
 .PHONY: sc usb pylint todo
 
 run:
-	$(CONTAINER_ENGINE) run --name $(CONTAINER_NAME) $(OPTIONS) $(ENVIRONMENT) $(MOUNTS) $(IMAGE_NAME) $(CONTAINER_CMD)
+	$(CONTAINER_ENGINE) run --name $(CONTAINER_NAME) $(OPTIONS) $(ENVIRONMENT) $(MOUNTS) $(IMAGE_TAG) $(CONTAINER_CMD)
 
 build: Dockerfile
-	$(CONTAINER_ENGINE) build --no-cache --rm -t $(IMAGE_NAME):$(VERSION) $(BUILD_ARGS) .
+	$(CONTAINER_ENGINE) build --no-cache --rm -t $(IMAGE_TAG):$(VERSION) $(BUILD_ARGS) .
 
 argfile: build.args
 argfile: BUILD_ARGS += $(shell IFS=$$'\n';for arg in $$(< build.args);do args+="--build-arg $$arg ";done;echo $$args)
@@ -94,9 +99,9 @@ args:
 	grep ARG Dockerfile | cut -d ' ' -f2
 
 shell:
-	$(CONTAINER_ENGINE) run -it --rm $(IMAGE_NAME) /bin/bash
+	$(CONTAINER_ENGINE) run -it --rm $(IMAGE_TAG) /bin/bash
 
 root-shell:
-	$(CONTAINER_ENGINE) run --user root -it --rm $(IMAGE_NAME) /bin/bash
+	$(CONTAINER_ENGINE) run --user root -it --rm $(IMAGE_TAG) /bin/bash
 
 default: build
