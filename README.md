@@ -95,6 +95,8 @@ Example for building v5.15:
 	
 ### Running
 
+	make home # copy home folder from default image
+	make update-ids # if image is built using different UID:GUID this updates the container to match
 	make run
 
 ### WSL2  
