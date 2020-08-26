@@ -62,11 +62,6 @@ fi
 mkdir "/home/$C_USER/.firefox_profile"
 mv /verify.bash "$C_HOME"
 
-if [ ! "$C_USER" = root ];then
-    chmod --recursive 755 "$C_HOME" \
-    && chown --recursive --from=0:0 "$C_USER:$C_USER" "$C_HOME"
-fi
-
 HOME=$C_HOME "$C_HOME/verify.bash" sum
 sha256sum "$TOOLCHAINS" > "$C_HOME/toolchains.shasum"
 
@@ -105,6 +100,11 @@ fi
 if [ "$FIREFOX" -eq 1 ];then
     echo 'Installing firefox-esr'
     apt-get install --yes --no-install-recommends firefox-esr &> /dev/null
+fi
+
+if [ ! "$C_USER" = root ];then
+    chmod --recursive 755 "$C_HOME" \
+    && chown --recursive --from=0:0 "$C_USER:$C_USER" "$C_HOME"
 fi
 
 rm --recursive --force /usr/share/man/* \
