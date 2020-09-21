@@ -47,7 +47,7 @@ fi
 
 if [ "$CUSTOM_VERSION" -gt 0 ];then
   # confirm version ending in [.05, .10] etc
-    if python3 -c "exit(0) if $MPLABX_VERSION * 100 % 5 == 0 else exit(1)";then
+    if perl -e "if ($MPLABX_VERSION * 100 % 5 == 0){ exit 0 } else { exit 1 }";then
       if grep .microchip <<< "$MPLABX_URL" &> /dev/null;then
         MPLABX_URL="https://ww1.microchip.com/downloads/en/DeviceDoc/MPLABX-v$MPLABX_VERSION-linux-installer.tar"
       fi

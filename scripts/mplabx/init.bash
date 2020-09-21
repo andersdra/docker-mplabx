@@ -1,5 +1,4 @@
 #!/bin/bash
-set -x
 
 # shellcheck disable=SC2046
 export $(xargs < /mplabx.env)
@@ -30,7 +29,6 @@ apt-get -qq install --yes --no-install-recommends \
     libxxf86dga1 \
     make \
     procps \
-    python3 \
     xz-utils \
     x11-utils &> /dev/null
 
@@ -45,7 +43,7 @@ apt-get -qq install --yes --no-install-recommends \
   libexpat1:i386 &> /dev/null
 
 V530MINUS=0
-if python3 -c "exit(0) if $MPLABX_VERSION > 0 else exit(1)";then
+if perl -e "if ($MPLABX_VERSION > 0){ exit 0 } else { exit 1 }";then
     V530MINUS=$(bc -l <<< "$MPLABX_VERSION <= 5.30")
     if [ "$V530MINUS" -eq 1 ];then
       echo 'Installing Java'
@@ -67,7 +65,7 @@ sha256sum "$TOOLCHAINS" > "$C_HOME/toolchains.shasum"
 
 echo 'Cleanup'
 /cleanup.bash
-apt-get purge --yes bc curl procps python3 make xz-utils &> /dev/null
+apt-get purge --yes bc curl procps make xz-utils &> /dev/null
 apt-get -qq clean autoclean &> /dev/null
 
 if [ "$NO_PIC_DFP" -eq 1 ];then

@@ -2,7 +2,7 @@
 # docker-mplabx
 # download and install toolchains
 
-set -x
+#set -x
 
 toolchain_append(){
   echo "$1" >> "$TOOLCHAINS"
@@ -89,7 +89,7 @@ if [ "$MCPXC16" -eq 1 ]
     && USER=root "$xc16_installer" \
        --mode unattended \
        --netservername localhost \
-       --LicenseType FreeMode
+       --LicenseType FreeMode \
        --prefix "$TOOLCHAIN_DIR"
     rm "$xc16_installer"
 fi
