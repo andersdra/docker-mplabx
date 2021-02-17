@@ -2,7 +2,7 @@
 # AVR, ARM GCC
 # Microchip XC8, XC16, XC32 
 # Source and docs: https://gitlab.com/andersdra/docker-mplabx
-FROM python:3.8.5-slim-buster AS toolchains
+FROM docker.io/library/python:3.8.5-slim-buster AS toolchains
 
 ARG DEBIAN_FRONTEND=noninteractive
 ARG MCP_USER
@@ -48,7 +48,7 @@ COPY scripts/tool_dl /
 RUN chmod +x /*.bash /*.py && /init.bash
 
 # MPLAB X
-FROM debian:buster-slim
+FROM docker.io/library/debian:buster-slim
 LABEL maintainer="Anders Draagen <andersdra@gmail.com>"
 
 ARG DEBIAN_FRONTEND=noninteractive
