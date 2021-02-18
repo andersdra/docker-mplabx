@@ -111,7 +111,7 @@ Run commands in powershell as administrator.
 
 #### Enable WSL and HYPER-V  
 	dism.exe /online /enable-feature /featurename:Microsoft-Windows-Subsystem-Linux /all /norestart
-	dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all /promptrestart  
+	dism.exe /online /enable-feature /featurename:VirtualMachinePlatform /all  
 
 #### Download and install latest WSL kernel, set WSL2 as default  
 	kernel_url = https://wslstorestorage.blob.core.windows.net/wslblob/wsl_update_x64.msi
