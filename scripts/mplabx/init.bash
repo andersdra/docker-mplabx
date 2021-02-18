@@ -32,15 +32,20 @@ apt-get -qq install --yes --no-install-recommends \
     xz-utils \
     x11-utils &> /dev/null
 
-echo 'Installing 32bit libraries'
-dpkg --add-architecture i386
-apt-get update &> /dev/null
-apt-get -qq install --yes --no-install-recommends \
-  libc6:i386 \
-  libx11-6:i386 \
-  libxext6:i386 \
-  libstdc++6:i386 \
-  libexpat1:i386 &> /dev/null
+if [ "$MPLABX_VERSION" -ne 0 ];then
+  V540MINUS=$(bc -l <<< "$MPLABX_VERSION <= 5.40")
+  if [ "$V540MINUS" -eq 1 ];then
+    echo 'Installing 32bit libraries'
+    dpkg --add-architecture i386
+    apt-get update &> /dev/null
+    apt-get -qq install --yes --no-install-recommends \
+      libc6:i386 \
+      libx11-6:i386 \
+      libxext6:i386 \
+      libstdc++6:i386 \
+      libexpat1:i386 &> /dev/null
+  fi
+fi
 
 V530MINUS=0
 if perl -e "if ($MPLABX_VERSION > 0){ exit 0 } else { exit 1 }";then
